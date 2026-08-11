@@ -1,0 +1,545 @@
+# Dynamic entrypoints for the futari entrypoint XEX (from ep.txt).
+
+[functions."0x8210B038"]
+name = "sub_8210B038"
+
+[functions."0x820F3C20"]
+name = "sub_820F3C20"
+
+[functions."0x821CB190"]
+name = "sub_821CB190"
+
+[functions."0x820EDF48"]
+name = "sub_820EDF48"
+
+[functions."0x82065AA8"]
+name = "sub_82065AA8"
+
+[functions."0x82061D70"]
+name = "sub_82061D70"
+
+[functions."0x82061D80"]
+name = "sub_82061D80"
+
+[functions."0x8210E780"]
+name = "sub_8210E780"
+
+[functions."0x82068818"]
+name = "sub_82068818"
+
+[functions."0x821BE398"]
+name = "sub_821BE398"
+
+[functions."0x82065A88"]
+name = "sub_82065A88"
+
+[functions."0x82063A58"]
+name = "sub_82063A58"
+
+[functions."0x82118178"]
+name = "sub_82118178"
+
+[functions."0x82065A98"]
+name = "sub_82065A98"
+
+[functions."0x82066048"]
+name = "sub_82066048"
+
+[functions."0x82065AB8"]
+name = "sub_82065AB8"
+
+[functions."0x82068828"]
+name = "sub_82068828"
+
+# Storage-device wrapper functions (real starts; PDATA only lists mid-function labels)
+[functions."0x8208EF00"]
+name = "sub_8208EF00"
+
+[functions."0x8208EF48"]
+name = "sub_8208EF48"
+
+[functions."0x8208EF88"]
+name = "sub_8208EF88"
+
+[functions."0x8208EF98"]
+name = "sub_8208EF98"
+
+[functions."0x8208EFD0"]
+name = "sub_8208EFD0"
+
+[functions."0x8208F010"]
+name = "sub_8208F010"
+
+[functions."0x8208F058"]
+name = "sub_8208F058"
+
+[functions."0x8208F0D0"]
+name = "sub_8208F0D0"
+
+# Data-table referenced functions (callback/vtable entries missing from PDATA discovery).
+
+[functions."0x82068300"]
+name = "sub_82068300"
+
+[functions."0x82068424"]
+name = "sub_82068424"
+
+[functions."0x82078208"]
+name = "sub_82078208"
+
+[functions."0x82078408"]
+name = "sub_82078408"
+
+[functions."0x8207A27C"]
+name = "sub_8207A27C"
+
+[functions."0x8207A2FC"]
+name = "sub_8207A2FC"
+
+[functions."0x8207A384"]
+name = "sub_8207A384"
+
+[functions."0x8207A78C"]
+name = "sub_8207A78C"
+
+[functions."0x8207A83C"]
+name = "sub_8207A83C"
+
+[functions."0x8207BD20"]
+name = "sub_8207BD20"
+
+[functions."0x8207BD5C"]
+name = "sub_8207BD5C"
+
+[functions."0x8207BDF8"]
+name = "sub_8207BDF8"
+
+[functions."0x8207BE54"]
+name = "sub_8207BE54"
+
+[functions."0x8207BF1C"]
+name = "sub_8207BF1C"
+
+[functions."0x8207C204"]
+name = "sub_8207C204"
+
+[functions."0x8207C234"]
+name = "sub_8207C234"
+
+[functions."0x8207C6A0"]
+name = "sub_8207C6A0"
+
+[functions."0x8207C6F4"]
+name = "sub_8207C6F4"
+
+[functions."0x8207C754"]
+name = "sub_8207C754"
+
+[functions."0x8207C76C"]
+name = "sub_8207C76C"
+
+[functions."0x8207C8B0"]
+name = "sub_8207C8B0"
+
+[functions."0x8207C8BC"]
+name = "sub_8207C8BC"
+
+[functions."0x8207CD58"]
+name = "sub_8207CD58"
+
+[functions."0x8207CD78"]
+name = "sub_8207CD78"
+
+[functions."0x8207CD84"]
+name = "sub_8207CD84"
+
+[functions."0x8207D1D0"]
+name = "sub_8207D1D0"
+
+[functions."0x8207D2E4"]
+name = "sub_8207D2E4"
+
+[functions."0x8207D758"]
+name = "sub_8207D758"
+
+[functions."0x8207D7A4"]
+name = "sub_8207D7A4"
+
+[functions."0x8207FFC0"]
+name = "sub_8207FFC0"
+
+[functions."0x82080050"]
+name = "sub_82080050"
+
+[functions."0x8208084C"]
+name = "sub_8208084C"
+
+[functions."0x82080A6C"]
+name = "sub_82080A6C"
+
+[functions."0x82080AF0"]
+name = "sub_82080AF0"
+
+[functions."0x82080E64"]
+name = "sub_82080E64"
+
+[functions."0x82080EB0"]
+name = "sub_82080EB0"
+
+[functions."0x82080FDC"]
+name = "sub_82080FDC"
+
+[functions."0x82081010"]
+name = "sub_82081010"
+
+[functions."0x8208103C"]
+name = "sub_8208103C"
+
+[functions."0x820816F0"]
+name = "sub_820816F0"
+
+[functions."0x8208172C"]
+name = "sub_8208172C"
+
+[functions."0x82081768"]
+name = "sub_82081768"
+
+[functions."0x82081778"]
+name = "sub_82081778"
+
+[functions."0x82081794"]
+name = "sub_82081794"
+
+[functions."0x820818D4"]
+name = "sub_820818D4"
+
+[functions."0x820818E0"]
+name = "sub_820818E0"
+
+[functions."0x820818F0"]
+name = "sub_820818F0"
+
+[functions."0x82081A68"]
+name = "sub_82081A68"
+
+[functions."0x82081C4C"]
+name = "sub_82081C4C"
+
+[functions."0x82081C5C"]
+name = "sub_82081C5C"
+
+[functions."0x82081CC8"]
+name = "sub_82081CC8"
+
+[functions."0x82081D8C"]
+name = "sub_82081D8C"
+
+[functions."0x82081D9C"]
+name = "sub_82081D9C"
+
+[functions."0x82082080"]
+name = "sub_82082080"
+
+[functions."0x82082440"]
+name = "sub_82082440"
+
+[functions."0x8208244C"]
+name = "sub_8208244C"
+
+[functions."0x8208245C"]
+name = "sub_8208245C"
+
+[functions."0x8208255C"]
+name = "sub_8208255C"
+
+[functions."0x82082564"]
+name = "sub_82082564"
+
+[functions."0x82082570"]
+name = "sub_82082570"
+
+[functions."0x820825BC"]
+name = "sub_820825BC"
+
+[functions."0x820825C4"]
+name = "sub_820825C4"
+
+[functions."0x820825D0"]
+name = "sub_820825D0"
+
+[functions."0x82082630"]
+name = "sub_82082630"
+
+[functions."0x8208263C"]
+name = "sub_8208263C"
+
+[functions."0x8208264C"]
+name = "sub_8208264C"
+
+[functions."0x8208293C"]
+name = "sub_8208293C"
+
+[functions."0x82082984"]
+name = "sub_82082984"
+
+[functions."0x82084B04"]
+name = "sub_82084B04"
+
+[functions."0x82084B10"]
+name = "sub_82084B10"
+
+[functions."0x82084DD4"]
+name = "sub_82084DD4"
+
+[functions."0x82084E08"]
+name = "sub_82084E08"
+
+[functions."0x82084EF4"]
+name = "sub_82084EF4"
+
+[functions."0x82084F5C"]
+name = "sub_82084F5C"
+
+[functions."0x82084F90"]
+name = "sub_82084F90"
+
+[functions."0x820850AC"]
+name = "sub_820850AC"
+
+[functions."0x82085BCC"]
+name = "sub_82085BCC"
+
+[functions."0x82085C04"]
+name = "sub_82085C04"
+
+[functions."0x82088414"]
+name = "sub_82088414"
+
+[functions."0x8208A2D4"]
+name = "sub_8208A2D4"
+
+[functions."0x8208A460"]
+name = "sub_8208A460"
+
+[functions."0x8208A46C"]
+name = "sub_8208A46C"
+
+[functions."0x8208BEF0"]
+name = "sub_8208BEF0"
+
+[functions."0x8208BF10"]
+name = "sub_8208BF10"
+
+[functions."0x8208BF20"]
+name = "sub_8208BF20"
+
+[functions."0x8208C4F0"]
+name = "sub_8208C4F0"
+
+[functions."0x8208CC8C"]
+name = "sub_8208CC8C"
+
+[functions."0x8208CDA4"]
+name = "sub_8208CDA4"
+
+[functions."0x8208CF84"]
+name = "sub_8208CF84"
+
+[functions."0x8208D10C"]
+name = "sub_8208D10C"
+
+[functions."0x8208D134"]
+name = "sub_8208D134"
+
+[functions."0x8208D694"]
+name = "sub_8208D694"
+
+[functions."0x8208D6B4"]
+name = "sub_8208D6B4"
+
+[functions."0x8208D6C4"]
+name = "sub_8208D6C4"
+
+[functions."0x8208D82C"]
+name = "sub_8208D82C"
+
+[functions."0x8208D83C"]
+name = "sub_8208D83C"
+
+[functions."0x8208D848"]
+name = "sub_8208D848"
+
+[functions."0x8208FE48"]
+name = "sub_8208FE48"
+
+[functions."0x8208FE68"]
+name = "sub_8208FE68"
+
+[functions."0x8208FE74"]
+name = "sub_8208FE74"
+
+[functions."0x82098424"]
+name = "sub_82098424"
+
+[functions."0x820B1010"]
+name = "sub_820B1010"
+
+[functions."0x820E1010"]
+name = "sub_820E1010"
+
+[functions."0x820E8040"]
+name = "sub_820E8040"
+
+[functions."0x820FE550"]
+name = "sub_820FE550"
+
+[functions."0x82108BE0"]
+name = "sub_82108BE0"
+
+[functions."0x82108BE8"]
+name = "sub_82108BE8"
+
+[functions."0x82108BF8"]
+name = "sub_82108BF8"
+
+[functions."0x8210E770"]
+name = "sub_8210E770"
+
+[functions."0x8210E778"]
+name = "sub_8210E778"
+
+[functions."0x8210E790"]
+name = "sub_8210E790"
+
+[functions."0x8210E798"]
+name = "sub_8210E798"
+
+[functions."0x8210E7A0"]
+name = "sub_8210E7A0"
+
+[functions."0x82113468"]
+name = "sub_82113468"
+
+[functions."0x82113470"]
+name = "sub_82113470"
+
+[functions."0x82113478"]
+name = "sub_82113478"
+
+[functions."0x82113480"]
+name = "sub_82113480"
+
+[functions."0x82113488"]
+name = "sub_82113488"
+
+[functions."0x82113498"]
+name = "sub_82113498"
+
+[functions."0x821134A0"]
+name = "sub_821134A0"
+
+[functions."0x821134A8"]
+name = "sub_821134A8"
+
+[functions."0x82113720"]
+name = "sub_82113720"
+
+[functions."0x82113730"]
+name = "sub_82113730"
+
+[functions."0x82113738"]
+name = "sub_82113738"
+
+[functions."0x82113DF0"]
+name = "sub_82113DF0"
+
+[functions."0x82116C28"]
+name = "sub_82116C28"
+
+[functions."0x82118D40"]
+name = "sub_82118D40"
+
+[functions."0x82122AF4"]
+name = "sub_82122AF4"
+
+[functions."0x82122B10"]
+name = "sub_82122B10"
+
+[functions."0x821367E8"]
+name = "sub_821367E8"
+
+[functions."0x821367F0"]
+name = "sub_821367F0"
+
+[functions."0x82136808"]
+name = "sub_82136808"
+
+[functions."0x82139260"]
+name = "sub_82139260"
+
+[functions."0x8215B9F0"]
+name = "sub_8215B9F0"
+
+[functions."0x8215BA0C"]
+name = "sub_8215BA0C"
+
+[functions."0x8215BBDC"]
+name = "sub_8215BBDC"
+
+[functions."0x8215BBF0"]
+name = "sub_8215BBF0"
+
+[functions."0x8215BDD8"]
+name = "sub_8215BDD8"
+
+[functions."0x8215BFDC"]
+name = "sub_8215BFDC"
+
+[functions."0x8215DE44"]
+name = "sub_8215DE44"
+
+[functions."0x8215DE8C"]
+name = "sub_8215DE8C"
+
+[functions."0x8215E094"]
+name = "sub_8215E094"
+
+[functions."0x8215E0E0"]
+name = "sub_8215E0E0"
+
+[functions."0x8215E64C"]
+name = "sub_8215E64C"
+
+[functions."0x8215E6A0"]
+name = "sub_8215E6A0"
+
+[functions."0x8215E6D4"]
+name = "sub_8215E6D4"
+
+[functions."0x8215E6EC"]
+name = "sub_8215E6EC"
+
+[functions."0x8215EE14"]
+name = "sub_8215EE14"
+
+[functions."0x8215EE34"]
+name = "sub_8215EE34"
+
+[functions."0x8215EF68"]
+name = "sub_8215EF68"
+
+[functions."0x8215F0B4"]
+name = "sub_8215F0B4"
+
+[functions."0x82169B08"]
+name = "sub_82169B08"
+
+[functions."0x82199E18"]
+name = "sub_82199E18"
+
+[functions."0x821B9E78"]
+name = "sub_821B9E78"
+
+[functions."0x821BE228"]
+name = "sub_821BE228"
+

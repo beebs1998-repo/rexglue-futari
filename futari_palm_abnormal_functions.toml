@@ -1,0 +1,76 @@
+# Function overrides for the palm_abnormal module.
+# 0x880DD7B4 (bctr at guest 0x880DD7B4, dispatch base 0x880DD7B8) is the
+# character-select / mode switch. Auto-detection mis-scans the bounds check,
+# truncating the table to 2 of 10 entries (cases 0 and 1 only), so any other
+# index traps (host crash). The full jump table lives in the decoded image at
+# guest 0x880E41B8 (10 entries, matches bounds check cmplwi r10,9).
+
+# 0x881B2978 gap fix
+
+# 0x881B2978 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x881B2978"]
+name = "sub_881B2978"
+
+
+# 0x881B83D0 gap fix
+
+# 0x881B83D0 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x881B83D0"]
+name = "sub_881B83D0"
+
+
+# 0x881C5530 gap fix
+
+# 0x881C5530 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x881C5530"]
+name = "sub_881C5530"
+
+
+# 0x88180500 gap fix
+
+# 0x88180500 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x88180500"]
+name = "sub_88180500"
+
+
+# 0x880B0B48 gap fix
+
+# 0x880B0B48 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x880B0B48"]
+name = "sub_880B0B48"
+
+
+# 0x880A49B0 gap fix
+
+# 0x880A49B0 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x880A49B0"]
+name = "sub_880A49B0"
+
+
+[[switch_tables]]
+address = 0x880DD7B4
+register = 11
+labels = [
+    0x880DD7EC,
+    0x880DD808,
+    0x880DD838,
+    0x880DD88C,
+    0x880DD8C4,
+    0x880DD8D0,
+    0x880DDAE0,
+    0x880DDBBC,
+    0x880DDBFC,
+    0x880DDC54,
+]
