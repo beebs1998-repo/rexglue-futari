@@ -1,0 +1,25 @@
+# Auto-generated cvar configuration
+gpu_plugin = "xenos"
+fullscreen = true            # start windowed
+window_width = 1280           # logical window width (0 = app default)
+window_height = 720           # logical window height
+video_mode_refresh_rate = 60.0
+vsync = true                  # GPU/Display
+mnk_mode = true
+keybind_a = "Z"
+keybind_b = "X"
+keybind_x = "C"
+keybind_y = "A"
+keybind_lstick_up = "I"
+keybind_lstick_down = "K"
+keybind_lstick_left = "J"
+keybind_lstick_right = "L"
+keybind_lstick_press = "O"
+keybind_start = "1"
+game_data_root = "game_data"
+user_data_root = "user_data"
+log_level = "info"
+# log_noisy = true
+# log_flush_interval = 1
+# log_max_file_size_mb = 50
+# log_max_files = 5

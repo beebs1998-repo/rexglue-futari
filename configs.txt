@@ -1,0 +1,21 @@
+Window/Display options (all kRequiresRestart, so edit the file and relaunch):
+fullscreen = false            # start windowed
+window_width = 1280           # logical window width (0 = app default)
+window_height = 720           # logical window height
+monitor = 0                   # 0=default, 1=primary, 2=second, ...
+resolution = "1080p"          # preset: 720p, 1080p, 1440p, 4k, or "1280x720"
+video_mode_width = 1280       # guest video mode (native guest resolution)
+video_mode_height = 720
+video_mode_refresh_rate = 60.0
+vsync = true                  # GPU/Display
+Other notable categories (all are REXCVAR_DEFINE_* in rexglue-sdk/src/):
+- Log — log_level ("trace"/"debug"/"info"/"warn"/"error"), log_file, log_verbose, log_noisy, log_flush_interval, log_max_file_size_mb, log_max_files
+- GPU — vsync, store_shaders, dump_shaders, native_2x_msaa, swap_post_effect ("none"/"fxaa"), trace_gpu_prefix, async_shader_compilation, query_occlusion_fake_sample_count, occlusion_query_enable
+- Audio — audio_mute
+- GPU plugin — gpu_plugin ("xenos" / "vulkan" / "d3d12")
+- Memory — writable_executable_memory
+- Filesystem — allow_game_relative_writes
+- Kernel — log_high_frequency_kernel_calls, kernel_debug_monitor, ignore_thread_priorities, ignore_thread_affinities
+- UI/Presenter — present_effect ("bilinear"), present_letterbox, present_safe_area_x/y, present_dither
+- UI/D3D12 — d3d12_debug, d3d12_adapter, d3d12_allow_variable_refresh_rate_and_tearing
+Note: futari.toml is regenerated on save (in-game settings overlay, settings_overlay.cpp:504) but only with modified cvars — so a manual fullscreen = false persists as long as you don't change it back in-game.

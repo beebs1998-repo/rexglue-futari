@@ -1,0 +1,32 @@
+# Function overrides for the kiniro_abnormal module.
+
+# 0x881B2978 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x881B2978"]
+name = "sub_881B2978"
+# 0x881B83D0 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x881B83D0"]
+name = "sub_881B83D0"
+# 0x881C5530 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x881C5530"]
+name = "sub_881C5530"
+# 0x88180500 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x88180500"]
+name = "sub_88180500"
+# 0x880B0B48 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x880B0B48"]
+name = "sub_880B0B48"
+# 0x880A49B0 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x880A49B0"]
+name = "sub_880A49B0"
