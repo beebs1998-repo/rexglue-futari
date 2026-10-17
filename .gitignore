@@ -1,0 +1,34 @@
+# Build output
+/out/
+
+# Runtime data (supplied by the user; not redistributable)
+/game_data/
+/user_data/
+/logs/
+
+# Generated recompiled code IS committed (see README: "Regenerating the code").
+# Only codegen bookkeeping/state is ignored, since it embeds absolute paths.
+/generated/default/codegen.d
+/generated/default/codegen.build.stamp
+/generated/**/codegen.stamp
+/generated/**/codegen.partition.json
+
+# Binaries
+*.exe
+*.dll
+*.backup*
+*.pdb
+*.ilk
+
+# Session / misc
+session-*.md
+stderr.txt
+stdout.txt
+codegen_out.txt
+ep.txt
+session-id.txt
+CMakeUserPresets.json
+
+# Editor
+.vscode/
+.idea/
