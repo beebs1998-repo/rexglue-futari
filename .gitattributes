@@ -1,0 +1,10 @@
+# Normalize line endings; keep scripts platform-appropriate.
+* text=auto
+*.sh text eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Keep generated recompiled code and the vendored SDK out of language stats
+# and collapse them in diffs.
+generated/** linguist-generated=true
+thirdparty/** linguist-vendored=true

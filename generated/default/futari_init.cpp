@@ -17,6 +17,16 @@ const rex::PPCImageInfo PPCImageConfig = {
 
     .register_modules = RegisterRecompiledModules,
 
+    .codegen_flags = {
+        .skip_lr = false,
+        .ctr_as_local = false,
+        .xer_as_local = false,
+        .reserved_as_local = false,
+        .skip_msr = false,
+        .cr_as_local = false,
+        .non_argument_as_local = false,
+        .non_volatile_as_local = false,
+    },
 };
 
 PPCFuncMapping PPCFuncMappings[] = {
