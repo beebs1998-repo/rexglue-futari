@@ -27723,6 +27723,14 @@ loc_881E0C34:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_881E4E88) {
+	REX_FUNC_PROLOGUE();
+	// li r3,0
+	ctx.r3.s64 = 0;
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_881E57C0) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

@@ -94,3 +94,11 @@ labels = [
     0x880EC1FC,
     0x880EC254,
 ]
+
+# 0x881E4E88 gap fix
+
+# 0x881E4E88 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x881E4E88"]
+name = "sub_881E4E88"

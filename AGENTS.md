@@ -114,6 +114,7 @@ name = "sub_<GUEST_ADDR>"
 | `0x88180500` | All 8 | Stage 3 crash |
 | `0x880B0B48` | All 8 | Stage 4 crash |
 | `0x880A49B0` | All 8 | Stage 5 boss crash |
+| `0x881E4E88` | All 8 | Stage 1 crash (1.5 Ultra; log evidence from reco_abnormal) |
 
 **palm_normal specific - bogus PDATA size**: PDATA-derived size for `0x88085F7C`
 is bogus (2105724), which crashed codegen; name-only override fixes it.

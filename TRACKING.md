@@ -243,3 +243,28 @@ notes that these iterations produced.
   unload/init traffic, clean shutdown (`Window closing` → `Title terminated`).
   No graphic or pacing anomalies; character and game-mode switching (1.5 /
   Arrange / Novice) all work.
+
+## Iteration 16 — Stage 1 crash (ver 1.5 Ultra, guest 0x881E4E88)
+
+- Crash: `[FATAL] Call to invalid or unregistered function at guest address
+  0x881E4E88` — player path "1.5 ver → Ultra mode → Palm, normal shot", killed
+  ~35 s into stage 1. Reproduced twice (`futari_013.log` with
+  `d3d12_submit_on_primary_buffer_end = false` pinned in `futari.toml`,
+  `futari_014.log` without it) at the identical address → unrelated to that
+  cvar; the log is the authority on the module: `reco_abnormal.xex` was the
+  only `XexLoadImage` in both sessions (no module swap).
+- Authoritative bug: same unregistered-function gap class as Iterations 3-7.
+- Fix: name-only `[functions."0x881E4E88"]` / `sub_881E4E88` added to **all
+  eight** module TOMLs per the shared-gap-range convention. Noteworthy: in five
+  of the eight (hirow_normal, hirow_abnormal, kiniro_normal, kiniro_abnormal,
+  reco_normal) the address already coincided with an auto-discovered boundary,
+  so only `palm_normal`, `palm_abnormal`, `reco_abnormal` regenerated with output
+  changes.
+- Regen: `scripts/codegen_all.ps1 -IgnoreStamp` (all 8 targets, project glue
+  files restored by the script); full rebuild clean; DLLs live in the build
+  output dir as usual.
+- Also: the user pinned `d3d12_submit_on_primary_buffer_end = false` in the
+  build-tree `futari.toml` (DFKBL slowdown guard, harmless broadly). With the
+  Iteration 15 cvar fix this survives F4→Save (kConfig-sourced values persist).
+- **Status**: fix built; playtest of the same character/mode path through
+  stage 1 pending to close.

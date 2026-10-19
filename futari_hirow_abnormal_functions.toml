@@ -30,3 +30,11 @@ name = "sub_880B0B48"
 
 [functions."0x880A49B0"]
 name = "sub_880A49B0"
+
+# 0x881E4E88 gap fix
+
+# 0x881E4E88 falls in a gap between auto-discovered functions.
+# Name-only override => CONFIG authority, discovery uses natural boundaries.
+
+[functions."0x881E4E88"]
+name = "sub_881E4E88"
