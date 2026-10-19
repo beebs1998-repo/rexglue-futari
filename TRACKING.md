@@ -272,5 +272,17 @@ notes that these iterations produced.
   the log) — and the eight modules are **not fully playtested** (the game is
   hard to reach deep content in); crash fixes surface reactively. See the new
   "Module naming & testing coverage" section in AGENTS.md.
-- **Status**: fix built; playtest of the same character/mode path through
-  stage 1 pending to close.
+- **Status**: RESOLVED. Playtest (`futari_016.1.log` + `futari_016.log`, 14:14-
+  14:17): ver 1.5 Ultra stage 1 passes, no `[error]`/`[critical]`, clean shutdown
+  (`Window closing` → `Title terminated`); gap closed for the affected path.
+- Addendum — unrelated transient: an earlier launch (`futari_015.log`, 14:12)
+  died ~5 s after boot, **before any character module load**, with a new
+  signature: `Unhandled guest access violation: read of guest 0x0000004C
+  (host 0x000000010000004C) on thread 0xF8000048` — a near-null guest read in
+  the startup window where the two `PS1 Controller` device-added events and
+  `XamNotifyCreateListener`/`XMPGetPlaybackController` fire. The next launch
+  (`futari_016.1.log`) had the identical controller-enumeration traffic and did
+  **not** crash, so the current evidence points to a one-shot startup race,
+  not a deterministic regression of this iteration. Not reproduced in the two
+  subsequent launches; if it recurs, it gets its own iteration (signature:
+  guest null-read in early boot, controller enumeration timing).
