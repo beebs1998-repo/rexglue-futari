@@ -195,5 +195,8 @@ notes that these iterations produced.
   default applies at the next run.
 - Fix: submodule `git checkout --detach 34ea1a0`; commit `Bump SDK to 34ea1a0`;
   `AGENTS.md` fact #2 refreshed with the new pin + legacy-branch pointer.
-- **Status**: pin bumped; build verification pending, then playtest + log
-  read-through to close.
+- **Status**: pin bumped; build verified against the new SDK — reconfigured the
+  build tree off the stale cached `REXSDK_DIR=I:/workspace/rexglue-sdk` (old
+  `8c6b399` tree, left untouched) onto the pinned submodule, and the full
+  build succeeded (`futari.exe` + all eight `futari_<module>.dll` freshly
+  linked). Playtest + log read-through pending to close.
