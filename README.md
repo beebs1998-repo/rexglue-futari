@@ -145,7 +145,7 @@ Then rebuild. Two things to know:
   up, add the address to the right TOML and regenerate (see AGENTS.md).
 - **Jump tables** — the ten-entry character/mode switches had to be given manual
   `[[switch_tables]]` overrides; auto-detection truncates them. See `TRACKING.md`.
-- **Module naming** — `palm_normal`, `reco_abnormal`, etc. are the SDK's internal
+- **Module naming** — `palm_normal`, `reco_abnormal`, etc. are CAVE's internal
   names for the shipped XEX files; they do **not** correspond to the game's menu
   labels (e.g. "Palm - Normal shot"). The log's `XexLoadImage` lines show which
   module was actually resident.

@@ -30,11 +30,12 @@ Two facts dominate everything else:
 ## Module naming & testing coverage
 
 The module/file names (`palm_normal`, `reco_abnormal`, `hirow_…`, `kiniro_…` ×
-`normal|abnormal`) come from the ReXGlue SDK's internal naming of the shipped
-XEX files — **not** from the game's own menu labels (e.g. "Palm - Normal shot").
-There is no reliable 1:1 mapping between in-game labels and module names; when
-diagnosing a crash, trust the log: the `XexLoadImage('…')` lines are the ground
-truth for which module was resident.
+`normal|abnormal`) are the **game developers'** internal naming (CAVE, for
+Mushihimesama Futari — the shipped XEX filenames), **not** the game's player-facing
+menu labels (e.g. "Palm - Normal shot") and not a ReXGlue invention. There is no
+reliable 1:1 mapping between in-game labels and module names; when diagnosing a
+crash, trust the log: the `XexLoadImage('…')` lines are the ground truth for which
+module was resident.
 
 Coverage status: **work in progress, the eight modules are not fully
 playtested.** Futari is a demanding game (its harder modes punish short
