@@ -159,6 +159,46 @@ notes that these iterations produced.
   where the game would leave a module resident, rather than the primary path.
 - **Status**: RESOLVED.
 
+## Iteration 15 — F4 save writes invalid TOML (next launch loses `gpu_plugin`)
+
+- Symptom: F4 → Save rewrote `futari.toml` with
+  `game_data_root = "i:\workspace\rexglue-futari\game_data"` (absolute,
+  launch.bat-supplied roots). The next launch produced no GPU emulation
+  (`no GPU emulation loaded (gpu_plugin not set)`): the file was invalid TOML
+  (`\w` in the unescaped Windows path is an illegal escape), so
+  `LoadConfig`'s `toml::parse_file` rejected the entire file and every cvar
+  (including `gpu_plugin = "xenos"`) stayed at its default.
+- Root cause (both upstream, in `rex::cvar::SerializeToTOML` — confirmed by
+  blame/merge-base: `9478ece4` is an ancestor of v0.10.0 and pristine; the
+  fork never touched `src/core/cvar.cpp`):
+  1. string cvar values were dumped unescaped into TOML basic strings;
+  2. every non-default cvar was dumped, including invocation-sourced ones —
+     CLI/env values are configuration inputs, not saved settings, and
+     persisting absolute roots re-asserts the launcher's intent from the
+     file.
+- Fix (SDK fork branch `fix/cvar-toml-serialization`, `a1b93af`): proper TOML
+  basic-string escaping (`\\`, `\"`, control chars as `\uXXXX`) in both
+  `SerializeToTOML` overloads, and entries with `Source::kCommandLine` /
+  `Source::kEnvironment` are no longer saved. Unit tests: escape round-trip
+  through the real parser (Windows path + quote + control char) and
+  invocation-source exclusion with config/runtime sources still persisting.
+- Test fixes bundled (pre-existing failures, all reproduced on a
+  clean `34ea1a0` baseline of 45 failing suite-wide tests → 41 after this
+  change, zero new): `temp_directory_path()` is not writable in this
+  environment (EACCES from the sandbox), so the cvar tests now probe temp
+  and fall back to the process CWD (`TestTempDir`); the "Load flat config"
+  test dropped its placeholder `REXCVAR_SET` calls, which under the
+  source-precedence model (kRuntime outranks kConfig) blocked the very load
+  they set up. Full `[cvar]` suite now passes (30/30, 151 assertions).
+- Fix (futari): repaired the corrupted `out/build/win-amd64-release/futari.toml`
+  by removing the two absolute root lines (launch.bat supplies them per
+  launch; `gpu_plugin` line intact).
+- Candidate for upstreaming to `rexglue/rexglue-sdk` — the serializer fixes
+  are upstream-compatible as-is.
+- **Status**: SDK fix landed + submodule bumped (`9b02dcb`); futari
+  release build already contains the fix. Playtest of F4→Save + relaunch
+  pending to close.
+
 ## Iteration 14 — SDK bump to the rewritten fork head (34ea1a0)
 
 - Context: the fork `beebs1998-repo/rexglue-sdk` force-pushed `origin/main`,
