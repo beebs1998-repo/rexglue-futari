@@ -158,3 +158,42 @@ notes that these iterations produced.
   logged nothing), so `src/futari_mod_swap_fix.cpp` is now a safety net for the case
   where the game would leave a module resident, rather than the primary path.
 - **Status**: RESOLVED.
+
+## Iteration 14 — SDK bump to the rewritten fork head (34ea1a0)
+
+- Context: the fork `beebs1998-repo/rexglue-sdk` force-pushed `origin/main`,
+  rewriting the history onto v0.10.0 with cherry-picked equivalents of our
+  runtime patches. New branches appeared: `origin/pristine` (= `origin/main`,
+  upstream-aligned) and `origin/legacy` (the previous 5-commit fork line plus
+  one new commit).
+- New pin: `34ea1a0` = `v0.10.0` + 4 commits — SSSE3 build flag (`39626a2`,
+  Clang-only cherry-pick of `c5b544d`, but the full tree diff shows no
+  toolchain/SSSE3 delta between the two pins), module-match-by-filename +
+  load/unload logging (`09ef27d`), `NormalizeGuestPath` NT-device-prefix strip
+  (`a388c9d`), and a default flip of `d3d12_submit_on_primary_buffer_end` to
+  false (`34ea1a0`).
+- **Archive: what is dropped from the legacy line (`8c6b399`; preserved
+  untracked on `origin/legacy` @ `f7d591f`)** — exactly two commits, both
+  graphics/UI and both unused by this project (`src/`, `futari.toml` reference
+  none of these cvars; `futari.toml` only sets core `vsync = true`, which
+  exists in v0.10.0 already):
+  - `d1de8d1` — adaptive VBlank pacing boost + telemetry + rate-limited GPU
+    logs: cvars `slowdown_pacing_boost`, `slowdown_pacing_boost_multiplier`,
+    `slowdown_debug_log`; `GraphicsSystem::NotifySwapSubmitted`,
+    `vblank_count()`, `swap_count()`, and the adaptive VBlank worker in
+    `graphics_system.cpp` / `command_processor.cpp` / `util/draw.cpp`.
+  - `793728c` — D3D12 VSync and guest-thread presentation cvars:
+    `d3d12_present_vsync` and `present_guest_thread_immediate`
+    (`src/ui/d3d12/d3d12_presenter.cpp`, `src/ui/presenter.cpp`).
+  Diff audit `git diff 8c6b399 34ea1a0` covers exactly those 8 files (+34/-252
+  net -218); `src/system/` — where both module-unload fixes from Iteration 13
+  live — is **byte-identical** between the two pins, so no archive concerns
+  there.
+- New behavior to watch: `d3d12_submit_on_primary_buffer_end` now defaults to
+  false (batched `ExecuteCommandLists` at swap/sync boundaries instead of
+  per-chunk submission). `futari.toml` does not pin this cvar, so the new
+  default applies at the next run.
+- Fix: submodule `git checkout --detach 34ea1a0`; commit `Bump SDK to 34ea1a0`;
+  `AGENTS.md` fact #2 refreshed with the new pin + legacy-branch pointer.
+- **Status**: pin bumped; build verification pending, then playtest + log
+  read-through to close.

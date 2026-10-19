@@ -15,13 +15,17 @@ Two facts dominate everything else:
 1. **The recompiled code is committed.** `generated/**` is checked in, so the
    project builds without the game. Do not hand-edit generated files; regenerate
    them (`scripts/codegen_all.ps1`).
-2. **The SDK is a pinned submodule with local patches.** `thirdparty/rexglue-sdk`
-   points at `beebs1998-repo/rexglue-sdk` @ `8c6b399d41b382be6e381f849ebd0c58d7d70127`
-   (`v0.10.0` + 5 commits: adaptive VBlank pacing + rate-limited GPU logs, D3D12
-   vsync/guest-present cvars, module-reload path fix, SSSE3 build flag, and the
-   `NormalizeGuestPath` NT-device-prefix strip that makes module unload work for
-   subpath guest paths). Building against a different SDK can change/crash
-   behaviour.
+2. **The SDK is a pinned submodule.** `thirdparty/rexglue-sdk` points at
+   `beebs1998-repo/rexglue-sdk` @ `34ea1a02926d9b7ba2e4f4bdcb84b9c93278a7c9`
+   (`v0.10.0` + 4 commits: batched D3D12 primary-buffer submission
+   (`d3d12_submit_on_primary_buffer_end` defaults to false), SSSE3 build flag,
+   the module-reload path fix, and the `NormalizeGuestPath` NT-device-prefix
+   strip that makes module unload work for subpath guest paths. Building
+   against a different SDK can change/crash behaviour. Note: the fork
+   force-pushed `origin/main` onto a rewritten history; the previous 5-commit
+   line (`8c6b399`, including adaptive VBlank pacing + D3D12
+   vsync/guest-present cvars) is preserved but **untracked** on the fork's
+   `origin/legacy` branch (`f7d591f`) — see TRACKING.md Iteration 14.
 
 ## Layout
 
