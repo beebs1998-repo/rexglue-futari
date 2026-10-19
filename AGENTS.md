@@ -27,6 +27,25 @@ Two facts dominate everything else:
    vsync/guest-present cvars) is preserved but **untracked** on the fork's
    `origin/legacy` branch (`f7d591f`) — see TRACKING.md Iteration 14.
 
+## Module naming & testing coverage
+
+The module/file names (`palm_normal`, `reco_abnormal`, `hirow_…`, `kiniro_…` ×
+`normal|abnormal`) come from the ReXGlue SDK's internal naming of the shipped
+XEX files — **not** from the game's own menu labels (e.g. "Palm - Normal shot").
+There is no reliable 1:1 mapping between in-game labels and module names; when
+diagnosing a crash, trust the log: the `XexLoadImage('…')` lines are the ground
+truth for which module was resident.
+
+Coverage status: **work in progress, the eight modules are not fully
+playtested.** Futari is a demanding game (its harder modes punish short
+sessions), so reachable content is limited and crashes surface reactively —
+as playtesting covers a new character/version/mode/stage combination, expect
+to discover further unregistered-function gaps or jump-table truncations, even
+after previously "passing" stages (see Iteration 16: a fresh stage-1 gap
+appeared in ver 1.5 Ultra long after stages 1-5 had been declared passable in
+Arrange ver). The gap table below records what has *actually crashed so far*,
+not an exhaustive list of possible gaps.
+
 ## Layout
 
 | Path | Notes |

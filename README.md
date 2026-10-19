@@ -145,6 +145,14 @@ Then rebuild. Two things to know:
   up, add the address to the right TOML and regenerate (see AGENTS.md).
 - **Jump tables** — the ten-entry character/mode switches had to be given manual
   `[[switch_tables]]` overrides; auto-detection truncates them. See `TRACKING.md`.
+- **Module naming** — `palm_normal`, `reco_abnormal`, etc. are the SDK's internal
+  names for the shipped XEX files; they do **not** correspond to the game's menu
+  labels (e.g. "Palm - Normal shot"). The log's `XexLoadImage` lines show which
+  module was actually resident.
+- **Test coverage is WIP** — the eight modules are not fully playtested. Futari is
+  a demanding game, so not every character/version/mode/section path has been
+  reached; expect new `[FATAL]` gaps or jump-table truncations as playtesting
+  covers more combinations, even in areas previously declared passable.
 
 ## Credits & legal
 

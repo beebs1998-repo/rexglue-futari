@@ -266,5 +266,11 @@ notes that these iterations produced.
 - Also: the user pinned `d3d12_submit_on_primary_buffer_end = false` in the
   build-tree `futari.toml` (DFKBL slowdown guard, harmless broadly). With the
   Iteration 15 cvar fix this survives F4→Save (kConfig-sourced values persist).
+- Also documented: the `reco_abnormal`-style module names are the SDK's internal
+  naming of the shipped XEX files, not the game's menu labels ("Palm - Normal
+  shot" resolved to `reco_abnormal.xex` in the log) — and the eight modules are
+  **not fully playtested** (the game is hard to reach deep content in); crash
+  fixes surface reactively. See the new "Module naming & testing coverage"
+  section in AGENTS.md.
 - **Status**: fix built; playtest of the same character/mode path through
   stage 1 pending to close.
