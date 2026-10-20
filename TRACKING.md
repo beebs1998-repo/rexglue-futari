@@ -623,3 +623,58 @@ notes that these iterations produced.
 
 
 
+
+## Iteration 22  Static function-hint derivation + embedded-trap gate
+
+Adopted the static crash-prediction methodology from the futari_recomp port
+(replacing the playtest-driven discovery of Iterations 3-8 and 17-21):
+
+- Wrote scripts/build_module_hints.ps1: per target, XenonRecomp's
+  reference function map (PDATA + bl-scan + gap-fill, ~8.3k addresses in the
+  0x88 scope / 9.4k in 0x82) is diffed against ReXGlue's registered set, the
+  diff is bulk-seeded, and candidates that decode as data/gap-fill ("has no
+  blocks - generating stub", ~2800 per module) are dropped. The survivors are
+  written as utari_<module>_hints.toml / utari_shell_hints.toml, seeded
+  FIRST in the manifest include list so the curated TOMLs keep authority
+  (last-wins merge). Per-module counts match the futari_recomp port
+  byte-for-byte: palm 45/44, hirow 42/42, kiniro 40/40, reco 46/46
+  (normal/abnormal), entrypoint 132 - 477 hints total.
+- Wrote scripts/validate_codegen.ps1 + scripts/trap_allowlist.txt: a
+  static gate that scans the committed generated/ tree for embedded
+  recompiler traps (REX_FATAL("Unresolved call/branch...", Jump target
+  ... unresolved at bctr / not registered, "// STUB:"), identified by
+  <target> <class> <guest addresses> so regens can shift line numbers
+  freely. Baseline at introduction: 17 entrypoint unresolved-call sites, 5
+  module unresolved-branch sites, 1 stub (triaged), ~501 informational
+  __builtin_trap() // Switch case out of range sites (SDK still hard-traps
+  out-of-range switch cases; porting the SDK fallback is deferred). Gate is
+  wired into codegen_all.ps1 and the Windows CI build right after codegen
+  restore, before the build step.
+- The first gate run after seeding caught **8 new embedded-trap sites** in the
+  shell's  x820E67xx region (4 unresolved calls + 4 unresolved branches):
+  the new shell hints split sub_820E6668 and exposed its internal
+  cross-region bl/b sites. Fix mirrors futari_recomp's own resolution (their
+  futari_functions.toml documents the same three targets): added
+  name-only [functions."0x820E6728"/"0x820E6734"/"0x820E673C"] to the
+  curated utari_functions.toml - the internal calls/branches resolve as
+  conditional tail calls and the FATALs are gone. Healthy fix-it loop: gate
+  caught a regression a playtest would have hit mid-run, with guest
+  addresses in the report.
+- Cross-check against the futari_recomp port: their registered entrypoint set
+  (6665) vs ours (6781). We register 119 addresses they don't (layered
+  curated heritage + hints); the only three addresses they had and we lacked
+  were exactly the  x820E6728/0x820E6734/0x820E673C fix above.
+- Regenerated all nine targets through codegen_all.ps1 (manifest now lists
+  hints first for entrypoint + all 8 modules); gate green:
+  "code validation OK (22 triaged site(s) allowed, 501 switch_trap site(s)
+  informational)". All 8 module codegen runs are hint-driven; the known
+  hirow/kiniro  x881B83x4-class unresolved conditional branches remain the
+  only module residue (block-twin class; needs block overrides or the SDK
+  chunk/parent port, deferred).
+- Deferred (SDK-level, see AGENTS.md): out-of-range switch-case __builtin_trap
+  fallback instead of trap; parent/chunk semantics (would clean the 17
+  triaged entrypoint unresolved-call sites the 0x82081778 chunk way).
+
+**Status**: RESOLVED for the unregistered-call class across all nine targets
+(no playtest needed to find them any more); gate green; awaiting a normal
+smoke launch to confirm signature egistered counts per module.

@@ -138,11 +138,25 @@ Then rebuild. Two things to know:
   `TRACKING.md`); the hook frees the shared `0x88000000` slot. That unload in turn
   relies on the pinned SDK normalizing the kernel's
   `\Device\Harddisk0\Partition1\...` path back to the manifest guest path.
-- **Discovery gaps** — auto-discovery occasionally misses function boundaries in a
-  few guest address ranges. Those addresses are registered as name-only overrides
-  in `futari_*_functions.toml` and re-applied on regeneration. If a new
-  `[FATAL] Call to invalid or unregistered function at guest address 0x...` shows
-  up, add the address to the right TOML and regenerate (see AGENTS.md).
+- **Discovery gaps** — auto-discovery misses functions that are only reached by
+  indirect calls. These are now found **statically**, by running
+  `scripts/build_module_hints.ps1` (XenonRecomp reference map diffed against
+  ReXGlue's registered set; XenonRecomp is a manual dependency cloned into
+  `thirdparty/XenonRecomp` and committed nowhere). The pass wrote the
+  `futari_*_hints.toml` files (477 entries: palm 45/44, hirow 42/42, kiniro
+  40/40, reco 46/46 normal/abnormal + 132 in the entrypoint) and should not
+  need touching unless the SDK or codegen changes. If a new
+  `[FATAL] Call to invalid or unregistered function at guest address 0x...`
+  shows up anyway, re-run the derivation pass, or add the address to the right
+  curated TOML and regenerate (see AGENTS.md).
+- **Embedded-trap gate** — `scripts/validate_codegen.ps1` scans the committed
+  `generated/` tree for recompiler failures baked into the code (`REX_FATAL`
+  traps, stub functions) instead of relying on playtesting to find them. It
+  runs in CI and after every `codegen_all.ps1`. Known residue is triaged in
+  `scripts/trap_allowlist.txt` (17 entrypoint unresolved-call sites — pending
+  the deferred parent/chunk SDK port — plus 5 module unresolved-branch sites
+  and 1 stub; ~501 informational switch-case traps that the SDK hard-traps
+  instead of falling back).
 - **Jump tables** — the ten-entry character/mode switches had to be given manual
   `[[switch_tables]]` overrides; auto-detection truncates them. See `TRACKING.md`.
 - **Module naming** — `palm_normal`, `reco_abnormal`, etc. are CAVE's internal
@@ -151,8 +165,11 @@ Then rebuild. Two things to know:
   module was actually resident.
 - **Test coverage is WIP** — the eight modules are not fully playtested. Futari is
   a demanding game, so not every character/version/mode/section path has been
-  reached; expect new `[FATAL]` gaps or jump-table truncations as playtesting
-  covers more combinations, even in areas previously declared passable.
+  reached. The static derivation pass closes the *unregistered-call* class for
+  the whole code section, but mid-block loop targets and jump-table truncations
+  can still surface on new paths (they register as embedded `REX_FATAL`
+  branch/trap sites, which the gate flags with guest addresses instead of
+  waiting for a runtime crash).
 
 ## Credits & legal
 

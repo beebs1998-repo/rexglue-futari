@@ -125,6 +125,59 @@ Workflow when the game hits an unregistered function
 3. Rebuild + re-stage (see Conventions).
 4. Record the iteration in `TRACKING.md`.
 
+## Static function-hint derivation (`scripts/build_module_hints.ps1`)
+
+The analyzer misses functions that are only reached by indirect calls (no
+PDATA/static edge), and each used to be found by playtesting until a
+`[FATAL] Call to invalid or unregistered function` fired. The derivation pass
+finds them all statically instead, per target:
+
+1. Run XenonRecomp (manual dep, `thirdparty/XenonRecomp`, not committed) on the
+   XEX for a full-coverage reference function map (PDATA + bl-scan + gap-fill).
+2. Diff that map against ReXGlue's registered set (a clean codegen run with the
+   target's TOML includes emptied; the shell keeps its curated TOML because the
+   dynamic entrypoints are invisible to static analysis and codegen validation
+   requires them). `-Quick` reads the committed `futari_init.cpp` instead.
+3. Bulk-seed the diff into `<target>_hints.toml`; codegen; drop candidates that
+   log `has no blocks - generating stub` (data / gap-fill misidentifications).
+4. Rewrite the hints file with what decoded to real instruction blocks.
+
+Counts from the first full pass (2026-10-21), matching the futari_recomp port
+of the same disc byte-for-byte per module: palm 45/44, hirow 42/42,
+kiniro 40/40, reco 46/46 (normal/abnormal), entrypoint 132 - 477 hints total.
+
+The manifest lists every hints TOML **before** the curated files (config merge
+is last-wins), so names and `[[switch_tables]]` in the curated TOMLs keep
+authority. The bulk-seed phase emits ~2800 data/gap-fill candidates per module;
+only ~45 survive as real entries — the stub filter does the work, don't hand
+trim the files.
+
+Re-run the pass after SDK bumps or codegen changes that alter function
+boundaries; it is cheap and catches the missed-entrypoint class without any
+launch.
+
+## Embedded-trap gate (`scripts/validate_codegen.ps1`)
+
+Scans the committed `generated/` tree (CI can run it; no game data needed) for
+recompiler failures emitted as embedded traps instead of caught at codegen:
+
+- `REX_FATAL("Unresolved call from 0x.. to 0x..")`
+- `REX_FATAL("Unresolved branch from 0x.. to 0x..")`
+- `REX_FATAL("Jump target 0x.. unresolved at bctr 0x..")`
+- `REX_FATAL("Jump target 0x.. classified as function but not registered")`
+- `// STUB: Function at 0x.. has no discovered code blocks`
+
+Sites are identified by `<target> <class> <guest addresses>` (host-file
+independent) and checked against the triaged allow-list
+`scripts/trap_allowlist.txt`; an unknown site fails the run (also wired into
+`codegen_all.ps1` and CI). Baseline at introduction: 17 shell unresolved-call
+sites, 5 module unresolved-branch sites (hirow×4, kiniro_normal×1), 1 shell
+stub, and ~501 informational `__builtin_trap() // Switch case out of range
+sites (SDK limitation, see the deferred SDK-fix note below). A new site is
+exactly what used to be discovered mid-playtest on stage N - fix it
+(hint/override) or triage it into the allow-list deliberately.
+
+
 ## Per-module override TOML (the fix mechanism)
 
 Overrides live in `futari_<module>_functions.toml`, referenced by that module's
