@@ -3655,8 +3655,7 @@ loc_82085048:
 	// cmplw cr6,r3,r11
 	ctx.cr6.compare<uint32_t>(ctx.r3.u32, ctx.r11.u32, ctx.xer);
 	// bge cr6,0x82085078
-	// ERROR: conditional branch to unknown address 0x82085078
-	if (!ctx.cr6.lt) REX_FATAL("Unresolved branch from 0x82085054 to 0x82085078");
+	if (!ctx.cr6.lt) goto loc_82085078;
 	// li r11,10
 	ctx.r11.s64 = 10;
 	// stb r10,4(r3)

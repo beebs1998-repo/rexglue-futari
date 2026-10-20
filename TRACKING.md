@@ -333,3 +333,63 @@ notes that these iterations produced.
   `.header` as a raw dump, so an imported package loses its original STFS
   header on first overwrite (read side unaffected, DFKBL iter-31 reader
   handles both formats).
+
+## Iteration 18  0x881B83DC "Unresolved branch" fatal (reco_abnormal) + branch classification fix in the SDK
+
+- Symptom (`futari_026.log` 11:38, session started 11:33): `reco_abnormal`
+  resident (sole `XexLoadImage` of the session; no module swap), then
+  `[FATAL] [core] [t1040] Unresolved branch from 0x881B83DC to 0x881B8368` and
+  `ucrtbase` 0xc0000409 fail-fast in the Application Error event.
+  Trigger: this is the character/mode-select loop body that hosts the
+  Iteration-8-era stage-2 mid-function entry `0x881B83D0` (registered in all
+  eight module TOMLs). The fatal fired when the loop branch
+  (`blt cr6, 0x881B8368` at 0x881B83DC) took the taken path for the first
+  time in playtesting.
+- Root cause (two layers):
+  1. Static: the generated code had the fatal baked in - both overlapping
+     copies (`sub_881B8038` in `futari_recomp.21.cpp`, `sub_881B83D0` in
+     `futari_recomp.26.cpp`). `FunctionGraph::classifyTarget` resolved the
+     branch site via `getFunctionContaining(callerAddr)` = the node with the
+     *highest base <= caller address* - i.e. the `0x881B83D0` fragment, whose
+     extent starts *after* the loop target `0x881B8368`. Target fell out as
+     `TargetKind::Unknown` and the builder emitted `REX_FATAL` instead of a
+     `goto`. This is a latent regression of the `0x881B83D0` name-only
+     override: before it existed the branch classified as an internal label.
+  2. Registering `0x881B8368` alone was insufficient: the newly created
+     `sub_881B8368` fragment then *itself* carried the same fatal for its own
+     loop-back branch (branch-to-own-base misclassified), and the
+     address-shifted character variants exposed more of the same class
+     (reco_normal `0x881B83D4 -> 0x881B8360` had still been silently baked
+     into the committed build; palm_abnormal's `0x881B83EC/83FC/8418 ->
+     0x881B8420` too; reco_normal `0x880A4A14 -> 0x880A494C` in the stage-5
+     boss region; futari entrypoint `0x82078220 -> 0x820781F4` and
+     `0x820784A8 -> 0x820783E4`).
+- Fix:
+  - SDK fork commit `348c804` (`fix(codegen): classify branch targets against
+    the emitting function node first`): `classifyTarget` now takes the
+    `FunctionNode` being recompiled and prefers node-local checks
+    (target == node base; node `containsAddress`) before the graph's
+    containing-function lookup; `build_b`/`build_bl`/`emit_conditional_branch`
+    and the jump-table dispatch all pass the emitting node.
+    `emit_conditional_branch` additionally falls back to a local goto (WARN)
+    instead of a fatal when the graph says call/tail-call but the site has no
+    pre-resolved `CallTarget` and the emitting node owns the target
+    (mirrors the existing `build_b` range fallback).
+  - Project registrations (name-only, CONFIG authority):
+    - `0x881B8368` (`sub_881B8368`) in **all eight** module TOMLs (reco_abnormal's
+      loop twin).
+    - `0x881B8360` + `0x880A494C` in `futari_reco_normal_functions.toml` (reco_normal
+      is byte-shifted -8 in this region; the boss-region twin).
+    - `0x820781F4` + `0x820783E4` in `futari_functions.toml` (entrypoint).
+  - Regenerated (module-target runs + entrypoint regen via a module run),
+    rebuilt all DLLs. **Zero** `REX_FATAL("Unresolved branch ...")` traps remain
+    in the committed generated tree (was: 31 across default + 4 modules in
+    HEAD, per `git grep`); the retained `Unresolved call ...` family in
+    `default.xex` (e.g. 0x8207C6B0) is a different emit path
+    (`emit_function_call`) and stays tracked reactively per the crash log.
+- Note for future crashes of this shape: `REX_FATAL("Unresolved branch from
+  X to Y")` - register Y (and inspect sibling emitted sites) with name-only
+  overrides; the classification itself is handled node-locally by the SDK.
+- **Status**: RESOLVED statically (no branch-class traps remain in generated
+  code); awaits playtest confirmation of the crash path (user drives; the
+  crash was on the mode-select/loop path that had never executed before).

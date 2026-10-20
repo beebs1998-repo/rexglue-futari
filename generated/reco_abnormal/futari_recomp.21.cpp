@@ -25450,8 +25450,10 @@ loc_881B83CC:
 	// cmpw cr6,r30,r25
 	ctx.cr6.compare<int32_t>(ctx.r30.s32, ctx.r25.s32, ctx.xer);
 	// blt cr6,0x881b8368
-	// ERROR: conditional branch to unknown address 0x881B8368
-	if (ctx.cr6.lt) REX_FATAL("Unresolved branch from 0x881B83DC to 0x881B8368");
+	if (ctx.cr6.lt) {
+		sub_881B8368(ctx, base);
+		return;
+	}
 	// lwz r11,272(r31)
 	ctx.r11.u64 = REX_LOAD_U32(ctx.r31.u32 + 272);
 	// lwz r10,256(r31)

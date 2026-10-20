@@ -2693,8 +2693,10 @@ loc_820781F4:
 	// cmplw cr6,r11,r10
 	ctx.cr6.compare<uint32_t>(ctx.r11.u32, ctx.r10.u32, ctx.xer);
 	// bne cr6,0x820781f4
-	// ERROR: conditional branch to unknown address 0x820781F4
-	if (!ctx.cr6.eq) REX_FATAL("Unresolved branch from 0x82078220 to 0x820781F4");
+	if (!ctx.cr6.eq) {
+		sub_820781F4(ctx, base);
+		return;
+	}
 loc_82078224:
 	// addi r1,r1,144
 	ctx.r1.s64 = ctx.r1.s64 + 144;

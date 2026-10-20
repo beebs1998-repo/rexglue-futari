@@ -16,11 +16,13 @@ Two facts dominate everything else:
    project builds without the game. Do not hand-edit generated files; regenerate
    them (`scripts/codegen_all.ps1`).
 2. **The SDK is a pinned submodule.** `thirdparty/rexglue-sdk` points at
-   `beebs1998-repo/rexglue-sdk` @ `bf63f94` (v0.10.0 + module-reload fixes
+   `beebs1998-repo/rexglue-sdk` @ `348c804` (v0.10.0 + module-reload fixes
    (`c0702cd`/`bf06423`), SSSE3 build flag (`51624b5`), D3D12
    `submit_on_primary_buffer_end` default false (`f3b93d5`), cvar TOML
    save-serialization fix (`b773a88`), DFKBL iter-31 save-import fixes
-   (`d25ba53`/`9019af7`), and the `profile_name` gamertag cvar (`bf63f94`).
+   (`d25ba53`/`9019af7`), the `profile_name` gamertag cvar (`bf63f94`), and the
+   branch-classification fix (classify against the emitting function node;
+   `348c804`).
    Building against a different SDK can change/crash behaviour. Note: the fork
    force-pushed `origin/main` onto a rewritten history; the previous 5-commit
    line (`8c6b399`, including adaptive VBlank pacing + D3D12
@@ -153,6 +155,17 @@ name = "sub_<GUEST_ADDR>"
 | `0x880B0B48` | All 8 | Stage 4 crash |
 | `0x880A49B0` | All 8 | Stage 5 boss crash |
 | `0x881E4E88` | All 8 | Stage 1 crash (1.5 Ultra; log evidence from reco_abnormal) |
+| `0x881B8368` | All 8 | Loop twin of `0x881B83D0` (reco_abnormal loop trap `0x881B83DC -> 0x881B8368`, mode-select path; see Tracking Iteration 18) |
+
+**Per-module twin addresses** (same loop/boss bodies, byte-shifted per module,
+registered only where the variant actually traps — see Tracking Iteration 18):
+reco_normal `0x881B8360` (its `-8`-shifted loop twin) and `0x880A494C`
+(stage-5 boss loop twin of the `0x880A49B0` mid-entry); entrypoint
+`futari_functions.toml` `0x820781F4`/`0x820783E4` (loop twins of the
+`0x82078208`/`0x82078408` data-table entries). These lack the all-8 row
+because the equivalent block starts at a different guest address in each
+variant — grep the generated tree for `REX_FATAL("Unresolved branch ...")`
+after a codegen run to check for another twin; there should be none.
 
 **palm_normal specific - bogus PDATA size**: PDATA-derived size for `0x88085F7C`
 is bogus (2105724), which crashed codegen; name-only override fixes it.

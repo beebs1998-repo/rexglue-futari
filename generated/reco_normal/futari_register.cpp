@@ -1267,6 +1267,7 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x880A4190, sub_880A4190);
   registrar->SetFunction(0x880A4620, sub_880A4620);
   registrar->SetFunction(0x880A4628, sub_880A4628);
+  registrar->SetFunction(0x880A494C, sub_880A494C);
   registrar->SetFunction(0x880A49B0, sub_880A49B0);
   registrar->SetFunction(0x880A4B20, sub_880A4B20);
   registrar->SetFunction(0x880A4DB8, sub_880A4DB8);
@@ -4361,6 +4362,8 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x881B62B0, sub_881B62B0);
   registrar->SetFunction(0x881B7808, sub_881B7808);
   registrar->SetFunction(0x881B8030, sub_881B8030);
+  registrar->SetFunction(0x881B8360, sub_881B8360);
+  registrar->SetFunction(0x881B8368, sub_881B8368);
   registrar->SetFunction(0x881B83D0, sub_881B83D0);
   registrar->SetFunction(0x881B8538, sub_881B8538);
   registrar->SetFunction(0x881B8978, sub_881B8978);

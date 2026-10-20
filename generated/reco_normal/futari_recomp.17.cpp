@@ -4090,8 +4090,10 @@ DEFINE_REX_FUNC(sub_880A49B0) {
 	// cmpw cr6,r9,r6
 	ctx.cr6.compare<int32_t>(ctx.r9.s32, ctx.r6.s32, ctx.xer);
 	// blt cr6,0x880a494c
-	// ERROR: conditional branch to unknown address 0x880A494C
-	if (ctx.cr6.lt) REX_FATAL("Unresolved branch from 0x880A4A14 to 0x880A494C");
+	if (ctx.cr6.lt) {
+		sub_880A494C(ctx, base);
+		return;
+	}
 	// lwz r11,2304(r29)
 	ctx.r11.u64 = REX_LOAD_U32(ctx.r29.u32 + 2304);
 	// li r10,2

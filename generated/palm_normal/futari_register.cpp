@@ -4406,6 +4406,7 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x881B7B30, sub_881B7B30);
   registrar->SetFunction(0x881B81D0, sub_881B81D0);
   registrar->SetFunction(0x881B81D8, sub_881B81D8);
+  registrar->SetFunction(0x881B8368, sub_881B8368);
   registrar->SetFunction(0x881B83D0, sub_881B83D0);
   registrar->SetFunction(0x881B8420, sub_881B8420);
   registrar->SetFunction(0x881B8480, sub_881B8480);

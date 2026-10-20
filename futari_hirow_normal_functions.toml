@@ -10,6 +10,19 @@ name = "sub_881B2978"
 
 [functions."0x881B83D0"]
 name = "sub_881B83D0"
+
+
+# 0x881B8368 gap fix
+
+# 0x881B8368 is the loop-target block inside the function hosting the
+# 0x881B83D0 mid-entry. With 0x881B83D0 registered, classifyTarget resolves
+# the branch site 0x881B83DC against sub_881B83D0 (highest base <= caller), so
+# the backward branch to 0x881B8368 classifies Unknown and the generated code
+# traps with REX_FATAL("Unresolved branch from 0x881B83DC to 0x881B8368").
+# Registering the target lets that branch resolve as a conditional tail call.
+
+[functions."0x881B8368"]
+name = "sub_881B8368"
 # 0x881C5530 falls in a gap between auto-discovered functions.
 # Name-only override => CONFIG authority, discovery uses natural boundaries.
 

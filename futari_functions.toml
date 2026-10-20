@@ -77,7 +77,6 @@ name = "sub_8208F058"
 name = "sub_8208F0D0"
 
 # Data-table referenced functions (callback/vtable entries missing from PDATA discovery).
-
 [functions."0x82068300"]
 name = "sub_82068300"
 
@@ -542,4 +541,15 @@ name = "sub_821B9E78"
 
 [functions."0x821BE228"]
 name = "sub_821BE228"
+
+# Loop-target twins for registered mid-function entries (same class as the
+# 0x881B8368 / 0x881B8360 module fixes): backward branches inside the
+# 0x82078208 / 0x82078408 fragments targeted these addresses, which classified
+# Unknown and baked REX_FATAL traps into the entrypoint recompilation.
+
+[functions."0x820781F4"]
+name = "sub_820781F4"
+
+[functions."0x820783E4"]
+name = "sub_820783E4"
 

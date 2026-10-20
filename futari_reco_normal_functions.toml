@@ -25,6 +25,36 @@ name = "sub_881B2978"
 name = "sub_881B83D0"
 
 
+# 0x881B8368 gap fix
+
+# 0x881B8368 is the loop-target block inside the function hosting the
+# 0x881B83D0 mid-entry. With 0x881B83D0 registered, classifyTarget resolves
+# the branch site 0x881B83DC against sub_881B83D0 (highest base <= caller), so
+# the backward branch to 0x881B8368 classifies Unknown and the generated code
+# traps with REX_FATAL("Unresolved branch from 0x881B83DC to 0x881B8368").
+# Registering the target lets that branch resolve as a conditional tail call.
+
+[functions."0x881B8368"]
+name = "sub_881B8368"
+
+
+# reco_normal is byte-shifted -8 vs reco_abnormal in this region: its loop
+# block starts at 0x881B8360 (branch site 0x881B83D4, was baked in as
+# REX_FATAL("Unresolved branch from 0x881B83D4 to 0x881B8368")). Same class as
+# the 0x881B8368 entry above.
+
+[functions."0x881B8360"]
+name = "sub_881B8360"
+
+
+# Stage-5 boss region twin: with 0x880A49B0 registered, the backward branch at
+# 0x880A4A14 targeted 0x880A494C (< fragment base) and classified Unknown in
+# one copy. Registering the target resolves that copy.
+
+[functions."0x880A494C"]
+name = "sub_880A494C"
+
+
 # 0x881C5530 gap fix
 
 # 0x881C5530 falls in a gap between auto-discovered functions.
