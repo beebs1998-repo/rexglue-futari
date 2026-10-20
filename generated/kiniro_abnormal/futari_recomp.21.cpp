@@ -6239,6 +6239,33 @@ loc_880A2800:
 	goto loc_880A1D3C;
 }
 
+DEFINE_REX_FUNC(sub_880C7F60) {
+	REX_FUNC_PROLOGUE();
+	uint32_t ea{};
+	// lis r11,-30642
+	ctx.r11.s64 = -2008154112;
+	// li r10,8
+	ctx.r10.s64 = 8;
+	// addi r11,r11,4988
+	ctx.r11.s64 = ctx.r11.s64 + 4988;
+	// li r9,0
+	ctx.r9.s64 = 0;
+	// addi r11,r11,-1
+	ctx.r11.s64 = ctx.r11.s64 + -1;
+	// mtctr r10
+	ctx.ctr.u64 = ctx.r10.u64;
+loc_880C7F78:
+	// stbu r9,1(r11)
+	ea = 1 + ctx.r11.u32;
+	REX_STORE_U8(ea, ctx.r9.u8);
+	ctx.r11.u32 = ea;
+	// bdnz 0x880c7f78
+	--ctx.ctr.u64;
+	if (ctx.ctr.u32 != 0) goto loc_880C7F78;
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_880CA5C0) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

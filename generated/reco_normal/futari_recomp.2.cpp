@@ -15003,6 +15003,12 @@ loc_8813B058:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_8813BD60) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_8813C7B0) {
 	REX_FUNC_PROLOGUE();
 	// lwz r8,128(r3)
@@ -28624,6 +28630,12 @@ loc_881E472C:
 	ctx.r1.s64 = ctx.r1.s64 + 144;
 	// b 0x8807119c
 	__restgprlr_25(ctx, base);
+	return;
+}
+
+DEFINE_REX_FUNC(sub_881E6E28) {
+	REX_FUNC_PROLOGUE();
+	// blr 
 	return;
 }
 

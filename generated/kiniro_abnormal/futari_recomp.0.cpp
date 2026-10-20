@@ -5054,6 +5054,15 @@ loc_880A3118:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_880A7AA0) {
+	REX_FUNC_PROLOGUE();
+	// mr r4,r5
+	ctx.r4.u64 = ctx.r5.u64;
+	// b 0x880a7810
+	sub_880A7810(ctx, base);
+	return;
+}
+
 DEFINE_REX_FUNC(sub_880B83F0) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};
@@ -15692,6 +15701,12 @@ loc_8813F830:
 	ctx.r1.s64 = ctx.r1.s64 + 160;
 	// b 0x88071198
 	__restgprlr_24(ctx, base);
+	return;
+}
+
+DEFINE_REX_FUNC(sub_881416A8) {
+	REX_FUNC_PROLOGUE();
+	// blr 
 	return;
 }
 

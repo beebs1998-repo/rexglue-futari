@@ -16135,6 +16135,12 @@ loc_88140C8C:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_881416A0) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_88141958) {
 	REX_FUNC_PROLOGUE();
 	PPCRegister temp{};
@@ -24317,6 +24323,76 @@ loc_881AA2F8:
 	ctx.r1.s64 = ctx.r1.s64 + 224;
 	// b 0x88071198
 	__restgprlr_24(ctx, base);
+	return;
+}
+
+DEFINE_REX_FUNC(sub_881AFB08) {
+	REX_FUNC_PROLOGUE();
+	// lwz r8,2304(r3)
+	ctx.r8.u64 = REX_LOAD_U32(ctx.r3.u32 + 2304);
+	// li r7,0
+	ctx.r7.s64 = 0;
+	// lwz r9,132(r8)
+	ctx.r9.u64 = REX_LOAD_U32(ctx.r8.u32 + 132);
+	// cmplwi cr6,r9,0
+	ctx.cr6.compare<uint32_t>(ctx.r9.u32, 0, ctx.xer);
+	// beq cr6,0x881afb4c
+	if (ctx.cr6.eq) goto loc_881AFB4C;
+	// li r10,10
+	ctx.r10.s64 = 10;
+	// addi r11,r3,1808
+	ctx.r11.s64 = ctx.r3.s64 + 1808;
+	// mtctr r10
+	ctx.ctr.u64 = ctx.r10.u64;
+loc_881AFB28:
+	// lwz r10,0(r11)
+	ctx.r10.u64 = REX_LOAD_U32(ctx.r11.u32 + 0);
+	// cmpwi cr6,r10,0
+	ctx.cr6.compare<int32_t>(ctx.r10.s32, 0, ctx.xer);
+	// beq cr6,0x881afb44
+	if (ctx.cr6.eq) goto loc_881AFB44;
+	// lwz r10,16(r11)
+	ctx.r10.u64 = REX_LOAD_U32(ctx.r11.u32 + 16);
+	// cmplw cr6,r10,r9
+	ctx.cr6.compare<uint32_t>(ctx.r10.u32, ctx.r9.u32, ctx.xer);
+	// bne cr6,0x881afb44
+	if (!ctx.cr6.eq) goto loc_881AFB44;
+	// stw r7,0(r11)
+	REX_STORE_U32(ctx.r11.u32 + 0, ctx.r7.u32);
+loc_881AFB44:
+	// addi r11,r11,48
+	ctx.r11.s64 = ctx.r11.s64 + 48;
+	// bdnz 0x881afb28
+	--ctx.ctr.u64;
+	if (ctx.ctr.u32 != 0) goto loc_881AFB28;
+loc_881AFB4C:
+	// lwz r9,128(r8)
+	ctx.r9.u64 = REX_LOAD_U32(ctx.r8.u32 + 128);
+	// cmplwi cr6,r9,0
+	ctx.cr6.compare<uint32_t>(ctx.r9.u32, 0, ctx.xer);
+	// beqlr cr6
+	if (ctx.cr6.eq) return;
+	// lis r11,-30659
+	ctx.r11.s64 = -2009268224;
+	// addi r11,r11,21864
+	ctx.r11.s64 = ctx.r11.s64 + 21864;
+	// lwz r10,-104(r11)
+	ctx.r10.u64 = REX_LOAD_U32(ctx.r11.u32 + -104);
+	// cmpwi cr6,r10,3000
+	ctx.cr6.compare<int32_t>(ctx.r10.s32, 3000, ctx.xer);
+	// bgelr cr6
+	if (!ctx.cr6.lt) return;
+	// rlwinm r8,r10,2,0,29
+	ctx.r8.u64 = __builtin_rotateleft64(ctx.r10.u32 | (ctx.r10.u64 << 32), 2) & 0xFFFFFFFC;
+	// stw r7,8(r9)
+	REX_STORE_U32(ctx.r9.u32 + 8, ctx.r7.u32);
+	// addi r10,r10,1
+	ctx.r10.s64 = ctx.r10.s64 + 1;
+	// stw r10,-104(r11)
+	REX_STORE_U32(ctx.r11.u32 + -104, ctx.r10.u32);
+	// stwx r9,r8,r11
+	REX_STORE_U32(ctx.r8.u32 + ctx.r11.u32, ctx.r9.u32);
+	// blr 
 	return;
 }
 

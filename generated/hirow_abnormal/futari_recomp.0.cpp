@@ -3682,6 +3682,14 @@ loc_8809D984:
 	goto loc_8809D870;
 }
 
+DEFINE_REX_FUNC(sub_8809E718) {
+	REX_FUNC_PROLOGUE();
+	// li r3,1
+	ctx.r3.s64 = 1;
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_880A0018) {
 	REX_FUNC_PROLOGUE();
 	PPCRegister temp{};
@@ -16435,6 +16443,12 @@ loc_88141314:
 	ctx.r11.s64 = ctx.r11.s64 + 24;
 	// b 0x88141274
 	goto loc_88141274;
+}
+
+DEFINE_REX_FUNC(sub_8814540C) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
 }
 
 DEFINE_REX_FUNC(sub_88146DB0) {

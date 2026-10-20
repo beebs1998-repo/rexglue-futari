@@ -2512,6 +2512,12 @@ DEFINE_REX_FUNC(sub_88091FA0) {
 	return;
 }
 
+DEFINE_REX_FUNC(sub_8809206C) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_88092070) {
 	REX_FUNC_PROLOGUE();
 	PPCRegister temp{};

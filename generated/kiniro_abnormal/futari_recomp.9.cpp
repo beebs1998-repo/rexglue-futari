@@ -776,6 +776,19 @@ loc_880726E0:
 	goto loc_880725E8;
 }
 
+DEFINE_REX_FUNC(sub_88073C60) {
+	REX_FUNC_PROLOGUE();
+	// stb r4,1(r6)
+	REX_STORE_U8(ctx.r6.u32 + 1, ctx.r4.u8);
+	// bdzlr- 
+	--ctx.ctr.u64;
+	if (ctx.ctr.u32 == 0) return;
+	// stb r4,2(r6)
+	REX_STORE_U8(ctx.r6.u32 + 2, ctx.r4.u8);
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_8807B4B0) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

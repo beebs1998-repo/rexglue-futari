@@ -4042,15 +4042,6 @@ loc_880A37A0:
 	return;
 }
 
-DEFINE_REX_FUNC(sub_880A49B0) {
-	REX_FUNC_PROLOGUE();
-	// mr r4,r5
-	ctx.r4.u64 = ctx.r5.u64;
-	// b 0x880a4720
-	sub_880A4720(ctx, base);
-	return;
-}
-
 DEFINE_REX_FUNC(sub_880A4A28) {
 	REX_FUNC_PROLOGUE();
 	// lis r11,-30620

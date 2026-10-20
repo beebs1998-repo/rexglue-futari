@@ -16350,6 +16350,12 @@ loc_881454E4:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_88146BA8) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_8814B868) {
 	REX_FUNC_PROLOGUE();
 	// lis r11,-30671

@@ -20888,6 +20888,15 @@ loc_8817B12C:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_8817D360) {
+	REX_FUNC_PROLOGUE();
+	// mr r4,r5
+	ctx.r4.u64 = ctx.r5.u64;
+	// b 0x8817d0d0
+	sub_8817D0D0(ctx, base);
+	return;
+}
+
 DEFINE_REX_FUNC(sub_8817F500) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

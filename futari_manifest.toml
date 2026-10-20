@@ -1,4 +1,9 @@
 # Codegen manifest for the futari recomp project.
+#
+# Include order matters: the generated <target>_hints.toml files (derived by
+# scripts/build_module_hints.ps1) are listed FIRST and the curated
+# futari*_functions.toml files LAST — the config merge is last-wins, so the
+# curated names and [[switch_tables]] overrides stay authoritative.
 
 [project]
 name = "futari"
@@ -8,52 +13,52 @@ game_root = "game_data"
 [entrypoint]
 file_path = "game_data/default.xex"
 out_directory_path = "generated/default"
-includes = ["futari_functions.toml"]
+includes = ["futari_shell_hints.toml", "futari_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/palm_normal.xex"
 file_path = "game_data/media/Module/palm_normal.xex"
 out_directory_path = "generated/palm_normal"
-includes = ["futari_palm_normal_functions.toml"]
+includes = ["futari_palm_normal_hints.toml", "futari_palm_normal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/palm_abnormal.xex"
 file_path = "game_data/media/Module/palm_abnormal.xex"
 out_directory_path = "generated/palm_abnormal"
-includes = ["futari_palm_abnormal_functions.toml"]
+includes = ["futari_palm_abnormal_hints.toml", "futari_palm_abnormal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/hirow_normal.xex"
 file_path = "game_data/media/Module/hirow_normal.xex"
 out_directory_path = "generated/hirow_normal"
-includes = ["futari_hirow_normal_functions.toml"]
+includes = ["futari_hirow_normal_hints.toml", "futari_hirow_normal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/hirow_abnormal.xex"
 file_path = "game_data/media/Module/hirow_abnormal.xex"
 out_directory_path = "generated/hirow_abnormal"
-includes = ["futari_hirow_abnormal_functions.toml"]
+includes = ["futari_hirow_abnormal_hints.toml", "futari_hirow_abnormal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/kiniro_normal.xex"
 file_path = "game_data/media/Module/kiniro_normal.xex"
 out_directory_path = "generated/kiniro_normal"
-includes = ["futari_kiniro_normal_functions.toml"]
+includes = ["futari_kiniro_normal_hints.toml", "futari_kiniro_normal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/kiniro_abnormal.xex"
 file_path = "game_data/media/Module/kiniro_abnormal.xex"
 out_directory_path = "generated/kiniro_abnormal"
-includes = ["futari_kiniro_abnormal_functions.toml"]
+includes = ["futari_kiniro_abnormal_hints.toml", "futari_kiniro_abnormal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/reco_normal.xex"
 file_path = "game_data/media/Module/reco_normal.xex"
 out_directory_path = "generated/reco_normal"
-includes = ["futari_reco_normal_functions.toml"]
+includes = ["futari_reco_normal_hints.toml", "futari_reco_normal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/reco_abnormal.xex"
 file_path = "game_data/media/Module/reco_abnormal.xex"
 out_directory_path = "generated/reco_abnormal"
-includes = ["futari_reco_abnormal_functions.toml"]
+includes = ["futari_reco_abnormal_hints.toml", "futari_reco_abnormal_functions.toml"]

@@ -13770,16 +13770,6 @@ loc_8813A8E0:
 	return;
 }
 
-DEFINE_REX_FUNC(sub_8813D0EC) {
-	REX_FUNC_PROLOGUE();
-	// stw r4,176(r3)
-	REX_STORE_U32(ctx.r3.u32 + 176, ctx.r4.u32);
-	// li r3,1
-	ctx.r3.s64 = 1;
-	// blr 
-	return;
-}
-
 DEFINE_REX_FUNC(sub_8813D230) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

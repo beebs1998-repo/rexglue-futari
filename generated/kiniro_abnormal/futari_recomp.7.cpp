@@ -28848,6 +28848,12 @@ loc_881E659C:
 	goto loc_881E637C;
 }
 
+DEFINE_REX_FUNC(sub_881E6E60) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_881ED620) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

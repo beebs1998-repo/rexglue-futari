@@ -3,9 +3,14 @@
 #include "futari_pch.h"
 
 DECLARE_REX_FUNC(__imp__ExRegisterTitleTerminateNotification);
+DECLARE_REX_FUNC(__imp__KeGetCurrentProcessType);
+DECLARE_REX_FUNC(__imp__NtAllocateVirtualMemory);
 DECLARE_REX_FUNC(__imp__NtFlushBuffersFile);
+DECLARE_REX_FUNC(__imp__NtFreeVirtualMemory);
+DECLARE_REX_FUNC(__imp__NtQueryVirtualMemory);
 DECLARE_REX_FUNC(__imp__RtlEnterCriticalSection);
 DECLARE_REX_FUNC(__imp__RtlInitAnsiString);
+DECLARE_REX_FUNC(__imp__RtlInitializeCriticalSection);
 DECLARE_REX_FUNC(__imp__RtlLeaveCriticalSection);
 DECLARE_REX_FUNC(__restgprlr_14);
 DECLARE_REX_FUNC(__restgprlr_15);
@@ -63,6 +68,7 @@ DECLARE_REX_FUNC(sub_88079B80);
 DECLARE_REX_FUNC(sub_8807DD98);
 DECLARE_REX_FUNC(sub_8807F148);
 DECLARE_REX_FUNC(sub_88083A08);
+DECLARE_REX_FUNC(sub_88084780);
 DECLARE_REX_FUNC(sub_880865A8);
 DECLARE_REX_FUNC(sub_88087ED0);
 DECLARE_REX_FUNC(sub_8808D6E0);

@@ -5673,6 +5673,14 @@ loc_880B9160:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_880B9770) {
+	REX_FUNC_PROLOGUE();
+	// li r3,1
+	ctx.r3.s64 = 1;
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_880BB940) {
 	REX_FUNC_PROLOGUE();
 	// lwz r10,2304(r3)

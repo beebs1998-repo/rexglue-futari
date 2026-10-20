@@ -3,6 +3,7 @@
 #include "futari_pch.h"
 
 DECLARE_REX_FUNC(__imp__DbgPrint);
+DECLARE_REX_FUNC(__imp__KeBugCheck);
 DECLARE_REX_FUNC(__imp__KeGetCurrentProcessType);
 DECLARE_REX_FUNC(__imp__MmAllocatePhysicalMemoryEx);
 DECLARE_REX_FUNC(__imp__NtAllocateVirtualMemory);
@@ -38,6 +39,8 @@ DECLARE_REX_FUNC(__savegprlr_28);
 DECLARE_REX_FUNC(__savegprlr_29);
 DECLARE_REX_FUNC(sub_880705A0);
 DECLARE_REX_FUNC(sub_88070800);
+DECLARE_REX_FUNC(sub_88070910);
+DECLARE_REX_FUNC(sub_88070AF4);
 DECLARE_REX_FUNC(sub_88070B48);
 DECLARE_REX_FUNC(sub_88070BB8);
 DECLARE_REX_FUNC(sub_88070E40);

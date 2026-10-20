@@ -13713,6 +13713,23 @@ loc_8813C5E0:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_8813D0E0) {
+	REX_FUNC_PROLOGUE();
+	// cmplwi cr6,r3,0
+	ctx.cr6.compare<uint32_t>(ctx.r3.u32, 0, ctx.xer);
+	// bne cr6,0x8813d0ec
+	if (!ctx.cr6.eq) goto loc_8813D0EC;
+	// blr 
+	return;
+loc_8813D0EC:
+	// stw r4,176(r3)
+	REX_STORE_U32(ctx.r3.u32 + 176, ctx.r4.u32);
+	// li r3,1
+	ctx.r3.s64 = 1;
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_8813F110) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

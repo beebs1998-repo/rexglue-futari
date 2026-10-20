@@ -2843,6 +2843,12 @@ DEFINE_REX_FUNC(sub_880920A8) {
 	return;
 }
 
+DEFINE_REX_FUNC(sub_880920DC) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_880921C0) {
 	REX_FUNC_PROLOGUE();
 	// lis r11,-30704

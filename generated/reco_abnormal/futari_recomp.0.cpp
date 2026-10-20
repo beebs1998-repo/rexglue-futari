@@ -3622,6 +3622,12 @@ loc_88099C90:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_8809F7A8) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_880A2680) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

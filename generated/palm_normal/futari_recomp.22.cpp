@@ -2732,6 +2732,12 @@ loc_88091E98:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_8809208C) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_880937E0) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};
@@ -4433,6 +4439,15 @@ loc_880A339C:
 	ctx.r1.s64 = ctx.r1.s64 + 176;
 	// b 0x8807119c
 	__restgprlr_21(ctx, base);
+	return;
+}
+
+DEFINE_REX_FUNC(sub_880A49B0) {
+	REX_FUNC_PROLOGUE();
+	// mr r4,r5
+	ctx.r4.u64 = ctx.r5.u64;
+	// b 0x880a4720
+	sub_880A4720(ctx, base);
 	return;
 }
 
@@ -15950,6 +15965,12 @@ loc_8813DE00:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_88141148) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_88142FE0) {
 	REX_FUNC_PROLOGUE();
 	PPCRegister temp{};
@@ -16212,6 +16233,16 @@ loc_881431C0:
 	ctx.r1.s64 = ctx.r1.s64 + 112;
 	// b 0x880711bc
 	__restgprlr_29(ctx, base);
+	return;
+}
+
+DEFINE_REX_FUNC(sub_88143B10) {
+	REX_FUNC_PROLOGUE();
+	// li r11,0
+	ctx.r11.s64 = 0;
+	// stb r11,0(r3)
+	REX_STORE_U8(ctx.r3.u32 + 0, ctx.r11.u8);
+	// blr 
 	return;
 }
 
@@ -28415,14 +28446,6 @@ loc_881E6488:
 	if (!ctx.cr0.eq) goto loc_881E6440;
 	// stw r10,-104(r6)
 	REX_STORE_U32(ctx.r6.u32 + -104, ctx.r10.u32);
-	// blr 
-	return;
-}
-
-DEFINE_REX_FUNC(sub_881E7200) {
-	REX_FUNC_PROLOGUE();
-	// li r3,0
-	ctx.r3.s64 = 0;
 	// blr 
 	return;
 }

@@ -2,6 +2,7 @@
 
 #include "futari_pch.h"
 
+DECLARE_REX_FUNC(__imp__KeBugCheck);
 DECLARE_REX_FUNC(__imp__RtlEnterCriticalSection);
 DECLARE_REX_FUNC(__imp__RtlLeaveCriticalSection);
 DECLARE_REX_FUNC(__restgprlr_14);
@@ -34,6 +35,7 @@ DECLARE_REX_FUNC(__savegprlr_28);
 DECLARE_REX_FUNC(__savegprlr_29);
 DECLARE_REX_FUNC(sub_88070590);
 DECLARE_REX_FUNC(sub_88070BF0);
+DECLARE_REX_FUNC(sub_88070CC0);
 DECLARE_REX_FUNC(sub_88072038);
 DECLARE_REX_FUNC(sub_88072080);
 DECLARE_REX_FUNC(sub_88072108);

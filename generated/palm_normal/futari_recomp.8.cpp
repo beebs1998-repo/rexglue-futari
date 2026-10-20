@@ -21010,6 +21010,15 @@ loc_8817C7D4:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_88180500) {
+	REX_FUNC_PROLOGUE();
+	// mr r4,r5
+	ctx.r4.u64 = ctx.r5.u64;
+	// b 0x88180270
+	sub_88180270(ctx, base);
+	return;
+}
+
 DEFINE_REX_FUNC(sub_88180568) {
 	REX_FUNC_PROLOGUE();
 	PPCRegister temp{};

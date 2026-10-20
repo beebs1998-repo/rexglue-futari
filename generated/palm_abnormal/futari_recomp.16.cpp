@@ -12779,6 +12779,12 @@ loc_88121304:
 	goto loc_88121290;
 }
 
+DEFINE_REX_FUNC(sub_88123480) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_8812C978) {
 	REX_FUNC_PROLOGUE();
 	// lis r11,-30649

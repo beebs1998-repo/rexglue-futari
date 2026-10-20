@@ -3,12 +3,16 @@
 #include "futari_pch.h"
 
 DECLARE_REX_FUNC(__imp__ExCreateThread);
+DECLARE_REX_FUNC(__imp__KeBugCheckEx);
+DECLARE_REX_FUNC(__imp__KeGetCurrentProcessType);
 DECLARE_REX_FUNC(__imp__KeSetBasePriorityThread);
+DECLARE_REX_FUNC(__imp__NtAllocateVirtualMemory);
 DECLARE_REX_FUNC(__imp__ObDereferenceObject);
 DECLARE_REX_FUNC(__imp__ObReferenceObjectByHandle);
 DECLARE_REX_FUNC(__imp__RtlEnterCriticalSection);
 DECLARE_REX_FUNC(__imp__RtlLeaveCriticalSection);
 DECLARE_REX_FUNC(__imp__RtlNtStatusToDosError);
+DECLARE_REX_FUNC(__imp__RtlRaiseException);
 DECLARE_REX_FUNC(__restgprlr_14);
 DECLARE_REX_FUNC(__restgprlr_15);
 DECLARE_REX_FUNC(__restgprlr_17);
@@ -38,6 +42,7 @@ DECLARE_REX_FUNC(__savegprlr_27);
 DECLARE_REX_FUNC(__savegprlr_28);
 DECLARE_REX_FUNC(__savegprlr_29);
 DECLARE_REX_FUNC(sub_88070318);
+DECLARE_REX_FUNC(sub_8807054C);
 DECLARE_REX_FUNC(sub_880707F0);
 DECLARE_REX_FUNC(sub_88071118);
 DECLARE_REX_FUNC(sub_88072038);
@@ -60,7 +65,10 @@ DECLARE_REX_FUNC(sub_88082CA0);
 DECLARE_REX_FUNC(sub_88082F70);
 DECLARE_REX_FUNC(sub_88083378);
 DECLARE_REX_FUNC(sub_88083B38);
+DECLARE_REX_FUNC(sub_88084520);
 DECLARE_REX_FUNC(sub_88084658);
+DECLARE_REX_FUNC(sub_880848D8);
+DECLARE_REX_FUNC(sub_88085CC4);
 DECLARE_REX_FUNC(sub_88086598);
 DECLARE_REX_FUNC(sub_88086768);
 DECLARE_REX_FUNC(sub_8808D1B8);

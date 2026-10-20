@@ -5917,6 +5917,14 @@ loc_880AE648:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_880B9C98) {
+	REX_FUNC_PROLOGUE();
+	// li r3,1
+	ctx.r3.s64 = 1;
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_880C37A8) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

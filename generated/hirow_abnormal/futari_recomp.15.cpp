@@ -19004,6 +19004,44 @@ loc_8815F26C:
 	goto loc_8815F22C;
 }
 
+DEFINE_REX_FUNC(sub_881679B0) {
+	REX_FUNC_PROLOGUE();
+	// lis r9,-30641
+	ctx.r9.s64 = -2008088576;
+	// lis r8,-30641
+	ctx.r8.s64 = -2008088576;
+	// li r10,0
+	ctx.r10.s64 = 0;
+	// addi r6,r9,-22800
+	ctx.r6.s64 = ctx.r9.s64 + -22800;
+	// addi r5,r8,-22692
+	ctx.r5.s64 = ctx.r8.s64 + -22692;
+	// lis r7,-30698
+	ctx.r7.s64 = -2011824128;
+	// stw r10,-22800(r9)
+	REX_STORE_U32(ctx.r9.u32 + -22800, ctx.r10.u32);
+	// mr r11,r3
+	ctx.r11.u64 = ctx.r3.u64;
+	// li r9,0
+	ctx.r9.s64 = 0;
+	// li r8,0
+	ctx.r8.s64 = 0;
+	// addi r10,r7,30576
+	ctx.r10.s64 = ctx.r7.s64 + 30576;
+	// stw r9,4(r6)
+	REX_STORE_U32(ctx.r6.u32 + 4, ctx.r9.u32);
+	// stw r8,8(r6)
+	REX_STORE_U32(ctx.r6.u32 + 8, ctx.r8.u32);
+	// li r3,1
+	ctx.r3.s64 = 1;
+	// stw r10,4(r5)
+	REX_STORE_U32(ctx.r5.u32 + 4, ctx.r10.u32);
+	// stw r11,8(r5)
+	REX_STORE_U32(ctx.r5.u32 + 8, ctx.r11.u32);
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_8816C5C0) {
 	REX_FUNC_PROLOGUE();
 	uint32_t ea{};

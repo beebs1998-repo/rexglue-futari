@@ -28003,6 +28003,14 @@ loc_881E00B0:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_881E2020) {
+	REX_FUNC_PROLOGUE();
+	// li r3,0
+	ctx.r3.s64 = 0;
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_881E3268) {
 	REX_FUNC_PROLOGUE();
 	// lis r10,-30649

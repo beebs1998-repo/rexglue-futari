@@ -12,7 +12,6 @@ DECLARE_REX_FUNC(__imp__RtlEnterCriticalSection);
 DECLARE_REX_FUNC(__imp__RtlLeaveCriticalSection);
 DECLARE_REX_FUNC(__restgprlr_14);
 DECLARE_REX_FUNC(__restgprlr_15);
-DECLARE_REX_FUNC(__restgprlr_16);
 DECLARE_REX_FUNC(__restgprlr_17);
 DECLARE_REX_FUNC(__restgprlr_20);
 DECLARE_REX_FUNC(__restgprlr_21);

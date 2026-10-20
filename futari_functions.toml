@@ -1,5 +1,15 @@
 # Dynamic entrypoints for the futari entrypoint XEX (from ep.txt).
 
+# Mid-block branch targets inside sub_820E6668 (which has an 18-entry jump
+# table), reached only from the twin regions seeded by
+# futari_shell_hints.toml (0x820E6724/0x820E6744/0x820E674C). Without these,
+# the internal bl/b sites emit REX_FATAL("Unresolved call/branch from X to Y")
+# in the generated code; seeding the 3 unique targets makes them resolvable
+# (conditional tail calls). Same fix futari_recomp applied for this region.
+[functions."0x820E6728"]
+[functions."0x820E6734"]
+[functions."0x820E673C"]
+
 [functions."0x8210B038"]
 name = "sub_8210B038"
 

@@ -10561,6 +10561,12 @@ loc_88117868:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_88118638) {
+	REX_FUNC_PROLOGUE();
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_88118640) {
 	REX_FUNC_PROLOGUE();
 	// lwz r9,128(r3)

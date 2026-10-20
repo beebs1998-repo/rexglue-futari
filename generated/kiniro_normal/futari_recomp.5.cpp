@@ -6818,6 +6818,14 @@ loc_880B6FF0:
 	return;
 }
 
+DEFINE_REX_FUNC(sub_880BC918) {
+	REX_FUNC_PROLOGUE();
+	// li r3,1
+	ctx.r3.s64 = 1;
+	// blr 
+	return;
+}
+
 DEFINE_REX_FUNC(sub_880CEE68) {
 	REX_FUNC_PROLOGUE();
 	// lwz r11,2304(r3)
@@ -28260,6 +28268,12 @@ loc_881E66E8:
 	ctx.r30.u64 = REX_LOAD_U64(ctx.r1.u32 + -24);
 	// ld r31,-16(r1)
 	ctx.r31.u64 = REX_LOAD_U64(ctx.r1.u32 + -16);
+	// blr 
+	return;
+}
+
+DEFINE_REX_FUNC(sub_881E6E58) {
+	REX_FUNC_PROLOGUE();
 	// blr 
 	return;
 }
