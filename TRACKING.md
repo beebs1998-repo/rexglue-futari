@@ -677,7 +677,13 @@ Adopted the static crash-prediction methodology from the futari_recomp port
 
 **Status**: RESOLVED for the unregistered-call class across all nine targets
 (no playtest needed to find them any more); gate green. **Playtest confirmed
-(Iteration 22 closing): all eight modules loaded and played without a single
-`[FATAL` Call to invalid or unregistered function - the crash class that
-Iterations 3-8 and 17-21 chased one address at a time is now covered statically
-by the 477 hints, and the embedded-trap gate held green across the sessions.**
+(Iteration 22 closing), log `futari_046.log` (06:05-06:14): all eight modules
+loaded/cycled in one session, every `registered <N> functions` signature
+matches the committed init table exactly - reco 5602/5598, palm 5647/5607,
+kiniro 5573/5565, hirow 5582/5583 (normal/abnormal) - every unload reports
+`recomp=found`, zero `[error]`/`[fatal]`/`[critical]` lines, clean shutdown
+("Window closing" -> "Title terminated"). Only log warning is the pre-existing
+`__imp__XamBackgroundDownloadSetMode STUB` (1 per XEX load in older logs
+too). The crash class that Iterations 3-8 and 17-21 chased one address at a
+time is now covered statically by the 477 hints, and the embedded-trap gate
+held green across the sessions.**
