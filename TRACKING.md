@@ -393,3 +393,34 @@ notes that these iterations produced.
 - **Status**: RESOLVED statically (no branch-class traps remain in generated
   code); awaits playtest confirmation of the crash path (user drives; the
   crash was on the mode-select/loop path that had never executed before).
+
+## Iteration 19 — F11 fullscreen-toggle hotkey (app-side port from dfkbl)
+
+- **Feature request**: in-game way to toggle windowed/fullscreen; the
+  `fullscreen` cvar (`UI/Window`) was previously only settable at launch or
+  via the F4 settings edit + "Save to config".
+- Root cause: no keybind existed for it; the pinned SDK (348c804) already
+  has all the pieces (keybind registry `rex/ui/keybinds.*`, `F11` in the
+  key-name table, and the `ReXApp::SetupPresentation` change callback that
+  applies `fullscreen` changes via `window_->SetFullscreen`).
+- Fix (app-side only, `src/futari_app.h`; mirrors dfkbl iters 32-34):
+  - `OnPostSetup` registers the bind `bind_fullscreen = "F11"`
+    ("Toggle fullscreen"); the callback flips the cvar via
+    `rex::cvar::SetFlagByName("fullscreen", …)` (runtime source: goes through
+    the cvar setter, fires the registered change callback, and serializes
+    with the flag registry on save). Remappable via the `bind_fullscreen`
+    cvar; appears under `Input/Keybinds/System` in the F4 UI.
+  - Save-on-exit: `OnConfigurePaths` captures `paths.config_path`
+    (`futari.toml`), `OnWindowCloseRequested` (Alt-F4/X path —
+    `ReXApp::OnClosing` hard-exits without reaching `OnShutdown`) and
+    `OnShutdown` (full teardown) both call `rex::cvar::SaveConfig`.
+    `SaveConfig` is a no-op when nothing differs from defaults.
+  - Persistence semantics (SDK omit-if-equals-default serializer):
+    `fullscreen` default is `true`, so leaving fullscreen drops the
+    `fullscreen = false` line and relaunch starts fullscreen; a windowed
+    exit writes `fullscreen = false` explicitly. Either way relaunch
+    matches the last toggled state.
+- No codegen needed (host-app code only); no SDK change.
+- **Status**: VERIFIED by user (2026-10-20) - F11 toggles
+  windowed/fullscreen in-game and the toggled state survives relaunch.
+
