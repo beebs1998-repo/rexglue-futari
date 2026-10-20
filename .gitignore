@@ -3,6 +3,8 @@
 
 # Runtime data (supplied by the user; not redistributable)
 /game_data/
+/scripts/module_maps/
+/thirdparty/XenonRecomp/
 /user_data/
 /logs/
 /dlc/

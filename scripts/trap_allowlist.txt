@@ -1,0 +1,32 @@
+﻿# Embedded-trap allow-list, triaged 2026-10-21 (when scripts/validate_codegen.ps1 landed).
+#
+# Every line below is an embedded recompiler trap present in the committed
+# generated/ tree when the gate was introduced; each mirrors residue documented
+# in TRACKING.md (playtest-verified-passable code paths, not live crashes).
+# New sites not listed here FAIL the gate: fix them (function-hint/override)
+# or triage them into this file deliberately, with a comment.
+#
+# Format: <target> <class> <addresses>; text after # is ignored.
+#
+default unresolved_call 0X82081790=0X820816EC   # generated\default\futari_recomp.1.cpp:3086
+default unresolved_call 0X8215E6E8=0X8215E65C   # generated\default\futari_recomp.12.cpp:24675
+default unresolved_call 0X8208085C=0X82080820   # generated\default\futari_recomp.13.cpp:2883
+default unresolved_call 0X82081790=0X820816EC   # generated\default\futari_recomp.13.cpp:3007
+default unresolved_call 0X82084FD8=0X82084F20   # generated\default\futari_recomp.15.cpp:3600
+default unresolved_call 0X82084FD8=0X82084F20   # generated\default\futari_recomp.15.cpp:3608
+default unresolved_call 0X82085018=0X82084F04   # generated\default\futari_recomp.15.cpp:3646
+default unresolved_call 0X82081790=0X820816EC   # generated\default\futari_recomp.17.cpp:3023
+default unresolved_call 0X8215BA1C=0X8215B9DC   # generated\default\futari_recomp.18.cpp:25202
+default unresolved_call 0X82084FD8=0X82084F20   # generated\default\futari_recomp.22.cpp:3592
+default unresolved_call 0X82084FD8=0X82084F20   # generated\default\futari_recomp.22.cpp:3600
+default unresolved_call 0X82085018=0X82084F04   # generated\default\futari_recomp.22.cpp:3638
+default unresolved_call 0X8215E6E8=0X8215E65C   # generated\default\futari_recomp.23.cpp:23122
+default unresolved_call 0X8207C768=0X8207C6B0   # generated\default\futari_recomp.24.cpp:2604
+default unresolved_call 0X82081790=0X820816EC   # generated\default\futari_recomp.4.cpp:3001
+default unresolved_call 0X8215BA1C=0X8215B9DC   # generated\default\futari_recomp.5.cpp:24500
+default unresolved_call 0X8207C768=0X8207C6B0   # generated\default\futari_recomp.6.cpp:2536
+hirow_normal unresolved_branch 0X881B8440=0X881B83B4   # generated\hirow_normal\futari_recomp.13.cpp:24388
+hirow_normal unresolved_branch 0X881E519C=0X881E4DF0   # generated\hirow_normal\futari_recomp.19.cpp:29938
+hirow_abnormal unresolved_branch 0X881B8448=0X881B83BC   # generated\hirow_abnormal\futari_recomp.13.cpp:24392
+hirow_abnormal unresolved_branch 0X881E51A4=0X881E4DF8   # generated\hirow_abnormal\futari_recomp.18.cpp:28127
+kiniro_normal unresolved_branch 0X881B2978=0X881B2964   # generated\kiniro_normal\futari_recomp.10.cpp:23819

@@ -21,6 +21,9 @@ jobs:
           Get-ChildItem "C:\Program Files\LLVM\bin\clang*.exe" | Select-Object -First 1
           Add-Content $env:GITHUB_PATH "C:\Program Files\LLVM\bin"
 
+      - name: Validate regenerated code (embedded-trap gate)
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/validate_codegen.ps1
+
       - name: Configure
         run: cmake --preset win-amd64-release
 

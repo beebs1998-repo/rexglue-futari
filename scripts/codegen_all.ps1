@@ -97,4 +97,11 @@ git checkout -- `
     generated/default/module_registry.cpp
 if ($LASTEXITCODE -ne 0) { throw "git checkout failed (exit $LASTEXITCODE)" }
 
+# Static crash gate: fail on embedded recompiler traps that are not in the
+# triaged allow-list (scripts/trap_allowlist.txt). This is what used to be
+# discovered by playtesting one guest address at a time.
+Write-Host "=== validating regenerated code (embedded-trap gate) ==="
+& (Join-Path $PSScriptRoot 'validate_codegen.ps1')
+if ($LASTEXITCODE -ne 0) { throw "embedded-trap gate failed ($LASTEXITCODE); triage or fix, see output above" }
+
 Write-Host "Done. Rebuild with: cmake --build --preset win-amd64-release --parallel"
