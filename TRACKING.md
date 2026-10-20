@@ -676,5 +676,8 @@ Adopted the static crash-prediction methodology from the futari_recomp port
   triaged entrypoint unresolved-call sites the 0x82081778 chunk way).
 
 **Status**: RESOLVED for the unregistered-call class across all nine targets
-(no playtest needed to find them any more); gate green; awaiting a normal
-smoke launch to confirm signature egistered counts per module.
+(no playtest needed to find them any more); gate green. **Playtest confirmed
+(Iteration 22 closing): all eight modules loaded and played without a single
+`[FATAL` Call to invalid or unregistered function - the crash class that
+Iterations 3-8 and 17-21 chased one address at a time is now covered statically
+by the 477 hints, and the embedded-trap gate held green across the sessions.**
