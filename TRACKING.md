@@ -283,6 +283,53 @@ notes that these iterations produced.
   `XamNotifyCreateListener`/`XMPGetPlaybackController` fire. The next launch
   (`futari_016.1.log`) had the identical controller-enumeration traffic and did
   **not** crash, so the current evidence points to a one-shot startup race,
-  not a deterministic regression of this iteration. Not reproduced in the two
+  not deterministic regression of this iteration. Not reproduced in the two
   subsequent launches; if it recurs, it gets its own iteration (signature:
   guest null-read in early boot, controller enumeration timing).
+
+## Iteration 17 — Game save system working (system config + replays)
+
+- Symptom: the save system did not work — `user_data` had no content, the
+  guest's `XamContentCreateEnumerator` polls returned 0 items, and replays
+  could not be recorded / system config could not be saved.
+- Diagnosis ([dbg] traces temporarily added to `xam_content.cpp` /
+  `content_manager.cpp` / `xam_user.cpp`, same technique as DFKBL iter-31,
+  removed after): the runtime Xam content layer was healthy end-to-end —
+  `XamShowDeviceSelectorUI` completes (device 1), enumeration succeeds, and the
+  guest flows (OPEN_EXISTING `systemdata.bin`/`replaydata.bin`; CREATE_ALWAYS
+  `systemdata.bin` for config save → `CreateContent` result 0 → `savegame.bin`
+  written through the mounted `save:` root) all round-trip once content exists.
+  The empty `user_data` was simply missing save data.
+- Fix (SDK fork `main` 9019af7 — two commits already validated on DFKBL:
+  `d25ba53` perf(gpu) rate-limit unresolvable resolve/draw floods,
+  `9019af7` fix(xam) accept full XContent/STFS package headers in
+  `ReadContentHeaderFile`): futari's submodule moved `b773a88` → `bf63f94`
+  (parent commit "Bump SDK to bf63f94"). Follow-up commit `bf63f94`
+  (`feat(xam): profile_name cvar for the signed-in gamertag`) makes the
+  hardcoded `User` gamertag configurable via `[Kernel] profile_name`
+  (empty value falls back to `User`).
+- Save data layout (futari, ≠ DFKBL `REPLAY DATA NN` packages): a Xenia Canary
+  save drops in as `user_data/<xuid>/435A07D7/00000001/{replaydata.bin,
+  systemdata.bin}/` — one package per data file, with a 328-byte raw
+  `XCONTENT_AGGREGATE_DATA` header per package under `Headers/00000001/`
+  (the runtime's native header format). Runtime-recorded replays merge into the
+  same `replaydata.bin` package; config saves rewrite
+  `systemdata.bin/savegame.bin` and regenerate the raw `.header` (Xenia's full
+  STFS header is replaced by a native raw dump — reads fine).
+- Replay names: the replay list shows the **profile gamertag** (from
+  `XamUserGetName`, default `User`, now overridable) next to the portrait; the
+  right-hand `1P` **pilot name** (`CRN`/`THC`) is the score-registration name
+  recorded at record time, offered only when the run's score reaches the local
+  top-10 — a low-score runtime run legitimately saves with no pilot name. Not a
+  runtime bug; verified byte-level against the Xenia Canary originals
+  (gamertag field record-relative `+0x32C`, pilot name `+0x378`).
+- Playtest evidence (user, 2026-10-20): Xenia save import → replays listed and
+  playing (futari_022/023/024 logs: 2 items enumerated, `systemdata.bin` opened
+  result 0, replay package open result 0, `XamUserGetName` → `User`); system
+  config save via CREATE_ALWAYS → SaveContent result 0; config loads back
+  (`Replay save&load works, system config save&load works`).
+- **Status**: RESOLVED for system config + replay save/load and the Xenia
+  Canary import path. Known cosmetic nit: the runtime regenerates the package
+  `.header` as a raw dump, so an imported package loses its original STFS
+  header on first overwrite (read side unaffected, DFKBL iter-31 reader
+  handles both formats).

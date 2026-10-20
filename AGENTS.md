@@ -16,12 +16,12 @@ Two facts dominate everything else:
    project builds without the game. Do not hand-edit generated files; regenerate
    them (`scripts/codegen_all.ps1`).
 2. **The SDK is a pinned submodule.** `thirdparty/rexglue-sdk` points at
-   `beebs1998-repo/rexglue-sdk` @ `34ea1a02926d9b7ba2e4f4bdcb84b9c93278a7c9`
-   (`v0.10.0` + 4 commits: batched D3D12 primary-buffer submission
-   (`d3d12_submit_on_primary_buffer_end` defaults to false), SSSE3 build flag,
-   the module-reload path fix, and the `NormalizeGuestPath` NT-device-prefix
-   strip that makes module unload work for subpath guest paths. Building
-   against a different SDK can change/crash behaviour. Note: the fork
+   `beebs1998-repo/rexglue-sdk` @ `bf63f94` (v0.10.0 + module-reload fixes
+   (`c0702cd`/`bf06423`), SSSE3 build flag (`51624b5`), D3D12
+   `submit_on_primary_buffer_end` default false (`f3b93d5`), cvar TOML
+   save-serialization fix (`b773a88`), DFKBL iter-31 save-import fixes
+   (`d25ba53`/`9019af7`), and the `profile_name` gamertag cvar (`bf63f94`).
+   Building against a different SDK can change/crash behaviour. Note: the fork
    force-pushed `origin/main` onto a rewritten history; the previous 5-commit
    line (`8c6b399`, including adaptive VBlank pacing + D3D12
    vsync/guest-present cvars) is preserved but **untracked** on the fork's
@@ -46,6 +46,24 @@ after previously "passing" stages (see Iteration 16: a fresh stage-1 gap
 appeared in ver 1.5 Ultra long after stages 1-5 had been declared passable in
 Arrange ver). The gap table below records what has *actually crashed so far*,
 not an exhaustive list of possible gaps.
+
+## Game save data (system config + replays)
+
+Saves live under `user_data/<xuid>/<title_id>/00000001/` (XUID is hardcoded
+`B13EBABEBABEBABE`; futari's title id is `435A07D7`). The supported layout is
+Xenia Canary's: one directory package per data file
+(`replaydata.bin/replaydata.bin`, `systemdata.bin/savegame.bin`) plus a
+328-byte raw `XCONTENT_AGGREGATE_DATA` dump at
+`Headers/00000001/<package>.header`. Copying Xenia's
+`content/B13EBABEBABEBABE/435A07D7/` into `user_data/B13EBABEBABEBABE/` works
+as-is (full STFS/CON headers are also accepted — SDK `9019af7`). The guest
+flow: replay/config *save* opens the package with `OPEN_EXISTING`
+(`replaydata.bin`) or `CREATE_ALWAYS` (`systemdata.bin`, which deletes +
+recreates the directory and regenerates a native raw header). Replay list
+names: profile gamertag = "User" (set `[Kernel] profile_name` in `futari.toml`
+to change); the right-hand 1P pilot name (e.g. `CRN`) is recorded at
+score-registration time when the run enters the local top-10 — low-score runs
+save without one. See TRACKING.md Iteration 17.
 
 ## Layout
 
