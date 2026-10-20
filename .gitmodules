@@ -1,3 +1,6 @@
 [submodule "thirdparty/rexglue-sdk"]
 	path = thirdparty/rexglue-sdk
 	url = https://github.com/beebs1998-repo/rexglue-sdk.git
+[submodule "thirdparty/XenonRecomp"]
+	path = thirdparty/XenonRecomp
+	url = https://github.com/beebs1998-repo/XenonRecomp

@@ -132,7 +132,9 @@ PDATA/static edge), and each used to be found by playtesting until a
 `[FATAL] Call to invalid or unregistered function` fired. The derivation pass
 finds them all statically instead, per target:
 
-1. Run XenonRecomp (manual dep, `thirdparty/XenonRecomp`, not committed) on the
+1. Run XenonRecomp (git submodule `thirdparty/XenonRecomp`, fork
+   `beebs1998-repo/XenonRecomp` pinned to upstream `ddd128b`; build once per
+   machine with `pwsh .\scripts\bootstrap_xenon.ps1`) on the
    XEX for a full-coverage reference function map (PDATA + bl-scan + gap-fill).
 2. Diff that map against ReXGlue's registered set (a clean codegen run with the
    target's TOML includes emptied; the shell keeps its curated TOML because the

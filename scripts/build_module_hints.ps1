@@ -24,10 +24,16 @@
 # the curated TOML stays authoritative (config merge is last wins), so no
 # existing name/switch_tables override can be clobbered.
 #
-# XenonRecomp is NOT a submodule and NOT needed for normal builds. To run
-# this script, clone and build it (console build; VS/cl fails on __builtins):
+# XenonRecomp is a git submodule (thirdparty/XenonRecomp, pinned fork
+# beebs1998-repo/XenonRecomp @ ddd128b). It is only needed by this script, not
+# for normal builds/CI. On a fresh machine run:
 #
-#   git clone --recursive https://github.com/hedge-dev/XenonRecomp thirdparty/XenonRecomp
+#   pwsh .\scripts\bootstrap_xenon.ps1
+#
+# which inits the submodule (recursively: fmt/tomlplusplus/xxHash are nested
+# submodules!) and builds it. The console build must use clang-cl: VS/cl fails
+# on the __builtin_bswap* builtins:
+#
 #   cmake -S thirdparty/XenonRecomp -B thirdparty/XenonRecomp/build \
 #     -G Ninja -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 #     -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl

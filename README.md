@@ -141,8 +141,9 @@ Then rebuild. Two things to know:
 - **Discovery gaps** — auto-discovery misses functions that are only reached by
   indirect calls. These are now found **statically**, by running
   `scripts/build_module_hints.ps1` (XenonRecomp reference map diffed against
-  ReXGlue's registered set; XenonRecomp is a manual dependency cloned into
-  `thirdparty/XenonRecomp` and committed nowhere). The pass wrote the
+  ReXGlue's registered set; XenonRecomp is the git submodule
+  `thirdparty/XenonRecomp`, built once per machine via
+  `scripts/bootstrap_xenon.ps1`). The pass wrote the
   `futari_*_hints.toml` files (477 entries: palm 45/44, hirow 42/42, kiniro
   40/40, reco 46/46 normal/abnormal + 132 in the entrypoint) and should not
   need touching unless the SDK or codegen changes. If a new
