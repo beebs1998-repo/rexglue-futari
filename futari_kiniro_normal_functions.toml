@@ -51,3 +51,27 @@ name = "sub_880A49B0"
 
 [functions."0x881E4E88"]
 name = "sub_881E4E88"
+
+# sub_880EEFA0 game-select switch truncation fix
+# Auto-detection mis-scans the jump-table bounds check (cmplwi r10,9), matching
+# the earlier cmpwi instead, truncating to 2 of 10 entries. Same shape as the
+# kiniro_abnormal 0x880EF0D0 table (all labels shifted -8). Dispatch bctr at
+# 0x880EF0C8; static table at anchor+4 (guest 0x880EF0CC), read from the
+# decoded module image. Reached via the Black Label -> Arcade ver path.
+# See TRACKING.md Iteration 20.
+
+[[switch_tables]]
+address = 0x880EF0C8
+register = 11
+labels = [
+    0x880EF100,
+    0x880EF11C,
+    0x880EF14C,
+    0x880EF1A0,
+    0x880EF1D8,
+    0x880EF1E4,
+    0x880EF440,
+    0x880EF51C,
+    0x880EF55C,
+    0x880EF5B4,
+]

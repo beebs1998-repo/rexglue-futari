@@ -156,6 +156,12 @@ name = "sub_<GUEST_ADDR>"
 | `0x880A49B0` | All 8 | Stage 5 boss crash |
 | `0x881E4E88` | All 8 | Stage 1 crash (1.5 Ultra; log evidence from reco_abnormal) |
 | `0x881B8368` | All 8 | Loop twin of `0x881B83D0` (reco_abnormal loop trap `0x881B83DC -> 0x881B8368`, mode-select path; see Tracking Iteration 18) |
+| `0x881AFB10` | kiniro_abnormal | BL Arrange (360 port) Original mode, stage 2 (360-port modes route to this module — Original + Maniac so far, both pilots; registered only where it trapped — watch for shifted twins in other modules; see Tracking Iteration 21) |
+| `0x881B5710` | kiniro_abnormal | BL Arrange (360 port) Original mode, stage 2 #2 — further into the stage (next gap after `0x881AFB10`; see Tracking Iteration 21) |
+| `0x881C2940` | kiniro_abnormal | BL Arrange (360 port) Original mode, stage 3 (stage 2 cleared first; below the `0x881C5530` stage-3 pair; see Tracking Iteration 21) |
+| `0x8817D368` | kiniro_abnormal | BL Arrange (360 port) Original mode, stage 3 boss (hit on a stale pre-`0x881C2940` DLL run; trap is genuine regardless; see Tracking Iteration 21) |
+| `0x880B3CA0` | kiniro_abnormal | BL Arrange (360 port) Original mode, stage 4 boss (next to the all-8 `0x880B0B48`; see Tracking Iteration 21) |
+| `0x880A7AA0` | kiniro_abnormal | BL Arrange (360 port) Original mode, stage 5 boss (new address in the `0x880A49B0` stage-5 boss family; see Tracking Iteration 21) |
 
 **Per-module twin addresses** (same loop/boss bodies, byte-shifted per module,
 registered only where the variant actually traps — see Tracking Iteration 18):
@@ -186,6 +192,18 @@ r10,9`). Each is fixed with a manual `[[switch_tables]]` entry:
   index r11, 10 labels `0x880EC8B4 .. 0x880ECD1C`.
 - **reco_abnormal** (`futari_reco_abnormal_functions.toml`): switch @ `0x880EC884`,
   index r11, 10 labels (guest base shifted -8 vs reco_normal).
+- **kiniro_abnormal** (`futari_kiniro_abnormal_functions.toml`): switch @
+  `0x880EF0D0`, index r11, 10 labels `0x880EF108 .. 0x880EF5BC` (table at
+  anchor+4, guest `0x880EF0D4`), inside `sub_880EEFA8` — reached only via the
+  Black Label DLC path (see Tracking Iteration 20). The other three unchecked
+  modules (`kiniro_normal`, `hirow_normal`, `hirow_abnormal`) most likely carry
+  the same game-select table shape at a shifted address; register only where a
+  real crash or audit shows the `cases != bound+1` inconsistency.
+  (Follow-up, Iteration 20: all four were audited and registered —
+  kiniro_normal `0x880EF0C8`/table `0x880EF0CC`, hirow_normal
+  `0x880EBCAC`/table `0x880EBCB0`, hirow_abnormal `0x880EBCB4`/table
+  `0x880EBCB8`; audit criterion = switch whose `case` count differs from its
+  bounds-check value+1, counted over `Switch case out of range` traps.)
 
 After adding/editing an override TOML, regenerate ALL affected modules, rebuild all
 DLLs, re-stage.

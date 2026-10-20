@@ -188,6 +188,7 @@ void futari_RegisterFunctions(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x820661D8, sub_820661D8);
   registrar->SetFunction(0x82066238, sub_82066238);
   registrar->SetFunction(0x820662A8, sub_820662A8);
+  registrar->SetFunction(0x820662C8, sub_820662C8);
   registrar->SetFunction(0x820662E8, sub_820662E8);
   registrar->SetFunction(0x82066348, sub_82066348);
   registrar->SetFunction(0x82066398, sub_82066398);

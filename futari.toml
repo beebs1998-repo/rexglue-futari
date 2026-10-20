@@ -24,3 +24,9 @@ keybind_rstick_press = "O"
 keybind_start = "1"
 profile_name = "REX"
 gpu_plugin = "xenos"
+
+# DLC unlock: grants all license bits (Black Label + Version 1.01) to
+# XamContentGetLicenseMask. Per-package licenses come from the 4-byte tails
+# appended to user_data\0000000000000000\435A07D7\Headers\00000002\*.header.
+[Kernel]
+license_mask = 4294967295

@@ -1278,6 +1278,7 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x880A7308, sub_880A7308);
   registrar->SetFunction(0x880A7310, sub_880A7310);
   registrar->SetFunction(0x880A7810, sub_880A7810);
+  registrar->SetFunction(0x880A7AA0, sub_880A7AA0);
   registrar->SetFunction(0x880A7AA8, sub_880A7AA8);
   registrar->SetFunction(0x880A7AC0, sub_880A7AC0);
   registrar->SetFunction(0x880A7B18, sub_880A7B18);
@@ -1415,6 +1416,7 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x880B34D8, sub_880B34D8);
   registrar->SetFunction(0x880B34E0, sub_880B34E0);
   registrar->SetFunction(0x880B3A10, sub_880B3A10);
+  registrar->SetFunction(0x880B3CA0, sub_880B3CA0);
   registrar->SetFunction(0x880B3CA8, sub_880B3CA8);
   registrar->SetFunction(0x880B3CC0, sub_880B3CC0);
   registrar->SetFunction(0x880B3D18, sub_880B3D18);
@@ -3859,6 +3861,7 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x8817CBD0, sub_8817CBD0);
   registrar->SetFunction(0x8817CBD8, sub_8817CBD8);
   registrar->SetFunction(0x8817D0D8, sub_8817D0D8);
+  registrar->SetFunction(0x8817D368, sub_8817D368);
   registrar->SetFunction(0x8817D370, sub_8817D370);
   registrar->SetFunction(0x8817D3B0, sub_8817D3B0);
   registrar->SetFunction(0x8817D3D0, sub_8817D3D0);
@@ -4305,6 +4308,7 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x881AF1C0, sub_881AF1C0);
   registrar->SetFunction(0x881AF650, sub_881AF650);
   registrar->SetFunction(0x881AF858, sub_881AF858);
+  registrar->SetFunction(0x881AFB10, sub_881AFB10);
   registrar->SetFunction(0x881AFB90, sub_881AFB90);
   registrar->SetFunction(0x881AFBF0, sub_881AFBF0);
   registrar->SetFunction(0x881AFC40, sub_881AFC40);
@@ -4344,6 +4348,7 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x881B4E60, sub_881B4E60);
   registrar->SetFunction(0x881B5510, sub_881B5510);
   registrar->SetFunction(0x881B5518, sub_881B5518);
+  registrar->SetFunction(0x881B5710, sub_881B5710);
   registrar->SetFunction(0x881B5760, sub_881B5760);
   registrar->SetFunction(0x881B57C0, sub_881B57C0);
   registrar->SetFunction(0x881B5890, sub_881B5890);
@@ -4404,7 +4409,7 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x881C1F70, sub_881C1F70);
   registrar->SetFunction(0x881C22C8, sub_881C22C8);
   registrar->SetFunction(0x881C2708, sub_881C2708);
-  registrar->SetFunction(0x881C2998, sub_881C2998);
+  registrar->SetFunction(0x881C2940, sub_881C2940);
   registrar->SetFunction(0x881C29B8, sub_881C29B8);
   registrar->SetFunction(0x881C2A18, sub_881C2A18);
   registrar->SetFunction(0x881C2AE8, sub_881C2AE8);
@@ -4637,6 +4642,7 @@ void ReXModule_Register(rex::runtime::IModuleRegistrar* registrar) {
   registrar->SetFunction(0x881E4560, sub_881E4560);
   registrar->SetFunction(0x881E4858, sub_881E4858);
   registrar->SetFunction(0x881E4918, sub_881E4918);
+  registrar->SetFunction(0x881E4CE0, sub_881E4CE0);
   registrar->SetFunction(0x881E4CE8, sub_881E4CE8);
   registrar->SetFunction(0x881E4D00, sub_881E4D00);
   registrar->SetFunction(0x881E4E60, sub_881E4E60);

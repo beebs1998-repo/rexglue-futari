@@ -553,3 +553,10 @@ name = "sub_820781F4"
 [functions."0x820783E4"]
 name = "sub_820783E4"
 
+# DLC (Black Label / Ver 1.01) game-start path (see TRACKING.md Iteration 19):
+# entering a DLC game from game select crashed with a call to the unregistered
+# 0x820662C8 (right after the XamBackgroundDownloadSetMode stub). It sits in
+# the unregistered stretch before the known 0x82066398.
+[functions."0x820662C8"]
+name = "sub_820662C8"
+

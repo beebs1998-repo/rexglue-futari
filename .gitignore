@@ -5,6 +5,7 @@
 /game_data/
 /user_data/
 /logs/
+/dlc/
 
 # Generated recompiled code IS committed (see README: "Regenerating the code").
 # Only codegen bookkeeping/state is ignored, since it embeds absolute paths.

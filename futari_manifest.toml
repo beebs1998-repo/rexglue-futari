@@ -26,25 +26,25 @@ includes = ["futari_palm_abnormal_functions.toml"]
 guest_path = "media/Module/hirow_normal.xex"
 file_path = "game_data/media/Module/hirow_normal.xex"
 out_directory_path = "generated/hirow_normal"
-includes = []
+includes = ["futari_hirow_normal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/hirow_abnormal.xex"
 file_path = "game_data/media/Module/hirow_abnormal.xex"
 out_directory_path = "generated/hirow_abnormal"
-includes = []
+includes = ["futari_hirow_abnormal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/kiniro_normal.xex"
 file_path = "game_data/media/Module/kiniro_normal.xex"
 out_directory_path = "generated/kiniro_normal"
-includes = []
+includes = ["futari_kiniro_normal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/kiniro_abnormal.xex"
 file_path = "game_data/media/Module/kiniro_abnormal.xex"
 out_directory_path = "generated/kiniro_abnormal"
-includes = []
+includes = ["futari_kiniro_abnormal_functions.toml"]
 
 [[modules]]
 guest_path = "media/Module/reco_normal.xex"

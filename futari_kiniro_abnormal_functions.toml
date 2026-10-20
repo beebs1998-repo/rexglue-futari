@@ -1,53 +1,83 @@
 # Function overrides for the kiniro_abnormal module.
 
-# 0x881B2978 falls in a gap between auto-discovered functions.
-# Name-only override => CONFIG authority, discovery uses natural boundaries.
+# sub_880EEFA8 (Black Label game-start path) crashed with the recompiler's
+# UD2 trap (0xC000001D) at host RVA 0x271149: auto-detection mis-scanned the
+# jump-table bounds check (matched the earlier cmpwi cr6,r11,1 inside the same
+# function instead of the true cmplwi r10,9), truncating the table to 2 of 10
+# entries. Manual override with the full jump table (kiniro_abnormal image
+# 0x880EF0D4, ten entries 0x880EF108..0x880EF5BC; dispatch bctr at 0x880EF0D0,
+# table at anchor+4, same shape as the palm_normal 0x880EBCAC table).
+# See TRACKING.md Iteration 20.
 
-[functions."0x881B2978"]
-name = "sub_881B2978"
-# 0x881B83D0 falls in a gap between auto-discovered functions.
-# Name-only override => CONFIG authority, discovery uses natural boundaries.
+[[switch_tables]]
+address = 0x880EF0D0
+register = 11
+labels = [
+    0x880EF108,
+    0x880EF124,
+    0x880EF154,
+    0x880EF1A8,
+    0x880EF1E0,
+    0x880EF1EC,
+    0x880EF448,
+    0x880EF524,
+    0x880EF564,
+    0x880EF5BC,
+]
 
-[functions."0x881B83D0"]
-name = "sub_881B83D0"
+# 0x881E4CE0 gap fix — Black Label game-start crash #2 (TRACKING.md Iteration
+# 20): "call to invalid or unregistered function 0x881E4CE0" when starting a
+# BL Original-mode stage. Gap sits in the 8-byte sliver before the registered
+# 0x881E4CE8 (loop-twin/mid-entry class, see the 0x881B8368 pattern; the
+# stage-1 gap family 0x881E4E88 is the next cluster up).
+[functions."0x881E4CE0"]
+name = "sub_881E4CE0"
 
+# 0x881AFB10 gap fix — Black Label Original-mode stage-2 crash (TRACKING.md
+# Iteration 21): "call to invalid or unregistered function 0x881AFB10" in the
+# BL Original ver (= kiniro_abnormal) run, stage 2. New first-time gap in the
+# shared stage-2 code range below the already-registered 0x881B2978/
+# 0x881B83D0 pair; discovered only in this module so far (register per-module;
+# watch for shifted twins when other BL modes/characters reach stage 2).
+[functions."0x881AFB10"]
+name = "sub_881AFB10"
 
-# 0x881B8368 gap fix
+# 0x881B5710 gap fix — BL Original stage-2 crash #2, same run further into the
+# stage (TRACKING.md Iteration 21): "call to invalid or unregistered function
+# 0x881B5710" after the 0x881AFB10 fix passed the earlier area. Sits between
+# that fix and the already-registered stage-2 pair 0x881B2978/0x881B83D0.
+[functions."0x881B5710"]
+name = "sub_881B5710"
 
-# 0x881B8368 is the loop-target block inside the function hosting the
-# 0x881B83D0 mid-entry. With 0x881B83D0 registered, classifyTarget resolves
-# the branch site 0x881B83DC against sub_881B83D0 (highest base <= caller), so
-# the backward branch to 0x881B8368 classifies Unknown and the generated code
-# traps with REX_FATAL("Unresolved branch from 0x881B83DC to 0x881B8368").
-# Registering the target lets that branch resolve as a conditional tail call.
+# 0x881C2940 gap fix — BL Original stage-3 crash (TRACKING.md Iteration 21):
+# "call to invalid or unregistered function 0x881C2940" after the two stage-2
+# fixes passed and the run reached stage 3. New gap below the registered
+# stage-3 pair 0x881C5530/0x88180500.
+[functions."0x881C2940"]
+name = "sub_881C2940"
 
-[functions."0x881B8368"]
-name = "sub_881B8368"
-# 0x881C5530 falls in a gap between auto-discovered functions.
-# Name-only override => CONFIG authority, discovery uses natural boundaries.
+# 0x8817D368 gap fix — BL Original stage-3 boss crash (TRACKING.md Iteration
+# 21): "call to invalid or unregistered function 0x8817D368". NOTE: the run
+# that hit this started while the previous build was still compiling, so it
+# ran the stale pre-0x881C2940 DLL (5529 functions); the gap is genuine
+# regardless — register it and verify the function count jumps to 5531 on the
+# next launch with the current build.
+[functions."0x8817D368"]
+name = "sub_8817D368"
 
-[functions."0x881C5530"]
-name = "sub_881C5530"
-# 0x88180500 falls in a gap between auto-discovered functions.
-# Name-only override => CONFIG authority, discovery uses natural boundaries.
+# 0x880B3CA0 gap fix — BL Original stage-4 boss crash (TRACKING.md Iteration
+# 21): "call to invalid or unregistered function 0x880B3CA0"; the previous
+# run reached stage 3 boss with all prior fixes resident (runtime count
+# 5530 == init-table size 5530) so this is a fresh gap in the stage-4 boss
+# area, new address next to the known all-8 0x880B0B48 stage-4 crash.
+[functions."0x880B3CA0"]
+name = "sub_880B3CA0"
 
-[functions."0x88180500"]
-name = "sub_88180500"
-# 0x880B0B48 falls in a gap between auto-discovered functions.
-# Name-only override => CONFIG authority, discovery uses natural boundaries.
+# 0x880A7AA0 gap fix — BL Original stage-5 boss crash (TRACKING.md Iteration
+# 21): "call to invalid or unregistered function 0x880A7AA0". Previous run
+# (futari_041.log) had all five fixes resident (runtime count 5531 == init
+# table) and cleared stage-4 boss; this is a new address near the stage-5
+# boss family (all-8 0x880A49B0 / reco-normal twin 0x880A494C).
+[functions."0x880A7AA0"]
+name = "sub_880A7AA0"
 
-[functions."0x880B0B48"]
-name = "sub_880B0B48"
-# 0x880A49B0 falls in a gap between auto-discovered functions.
-# Name-only override => CONFIG authority, discovery uses natural boundaries.
-
-[functions."0x880A49B0"]
-name = "sub_880A49B0"
-
-# 0x881E4E88 gap fix
-
-# 0x881E4E88 falls in a gap between auto-discovered functions.
-# Name-only override => CONFIG authority, discovery uses natural boundaries.
-
-[functions."0x881E4E88"]
-name = "sub_881E4E88"

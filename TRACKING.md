@@ -424,3 +424,202 @@ notes that these iterations produced.
 - **Status**: VERIFIED by user (2026-10-20) - F11 toggles
   windowed/fullscreen in-game and the toggled state survives relaunch.
 
+## Iteration 20 — DLC games (Black Label + Version 1.01) unlocked and booting
+
+- **Feature request**: run the two marketplace DLCs (Xenia `content`
+  dumps: `00000002/496F816D…` = ブラックレーベル Black Label, `00000002/9893A78C…`
+  = Version1.01) that were first staged locally under `dlc/`.
+- Facts established before staging:
+  - Both `LIVE` packages carry **no module XEXs** — BL is data-only
+    (`spa.bin` + `Rom/cg_black.bin`, `cg_blackhi.bin`, `dropprm.bl`; all
+    byte-identical to the disc copies already in `game_data/media/`),
+    Ver1.01 is an 11-byte key file (`"Version1.01"`). DLC game logic ships
+    on disc: `default.xex` contains the `Bootup MODULE_BLACK/MODULE_102*`
+    labels and the `bldata:\` / `game:\media\` mount-root fallback pair.
+  - SDK `ContentManager` marketplace-content layout is
+    `user_data/0000000000000000/435A07D7/00000002/<package_name>/` +
+    `Headers/00000002/<package_name>.header` (xuid forced to 0).
+- Staging: copied `dlc/0000000000000000/` → `user_data/0000000000000000/`;
+  appended a 4-byte `0xFFFFFFFF` license tail to the two staged
+  `.header` files (the `LoadPackageLicenseMask` /
+  `WriteContentHeaderFile` tail convention);
+  `futari.toml` `[Kernel] license_mask = 4294967295` for the
+  `XamContentGetLicenseMask` path (`/dlc/` gitignored).
+- Result 1: **both DLC games appear in the game select** — the
+  unlock+enumeration path works with zero code changes.
+- Result 2: entering a DLC game crashed with the usual first-time gap:
+  `[FATAL] Call to invalid or unregistered function at guest address
+  0x820662C8` (entrypoint; immediately after the
+  `XamBackgroundDownloadSetMode STUB` line). This is a small virtual-dispatch
+  thunk (`lwz r12,0(r3); lwz r11,76(r12); bctr`) in the unregistered stretch
+  before `0x82066398`.
+- Fix: name-only override `[functions."0x820662C8"]` in
+  `futari_functions.toml`; `scripts/codegen_all.ps1` (entrypoint
+  regenerated, modules stamp-skipped + glue files restored); rebuild.
+- Second gap (same mode, after recomp): native hard crash, log ends after
+  an `XGIUserWriteAchievements` line (no guest `[FATAL]`). Event 1000:
+  `0xC000001D` at `futari_kiniro_abnormal.dll` RVA `0x271149` — the
+  recompiler's UD2. Resolved via an `/MAP` relink of the DLL (no layout
+  change): the RVAs floor symbol is `sub_880EEFA8`. Cause: the standard
+  truncated-jump-table path — auto-detection matched the earlier
+  `cmpwi cr6,r11,1` in the function instead of the true `cmplwi r10,9`
+  bounds check, rebuilding only cases 0-1 (`loc_880EF108`/`loc_880EF124`)
+  with `default: __builtin_trap()`. Audit of all 62 `Switch case out of
+  range` traps in `generated/kiniro_abnormal` shows this is the ONLY one
+  whose case count disagrees with its bounds check (`cases=2, bound=9`;
+  the other 61 all have `cases == bound+1`).
+- Fix: created `futari_kiniro_abnormal_functions.toml` (first override file
+  for this module) with `[[switch_tables]] address = 0x880EF0D0` (the
+  dispatch `bctr`; table at anchor+4 = `0x880EF0D4`, same shape as
+  palm_normal's `0x880EBCAC`), `register = 11`, 10 labels read from the
+  decoded module image (`0x880EF108 .. 0x880EF5BC`); registered in
+  `futari_manifest.toml` includes. Regenerated only
+  `--target kiniro_abnormal` + glue-file restore; rebuilt.
+- Third gap (BL Original mode - Palm, stage start): guest
+  `[FATAL] Call to invalid or unregistered function at guest address
+  0x881E4CE0` (module fn table jumps `0x881E4918 -> 0x881E4CE8`; the target
+  is the 8-byte sliver before `0x881E4CE8` — loop-twin/mid-entry class like
+  `0x881B8368`, next to the stage-1 gap family `0x881E4E88`). Recompiles to
+  a real `li r3,0; blr` stub. Fix: name-only override
+  `[functions."0x881E4CE0"]` in `futari_kiniro_abnormal_functions.toml`;
+  regen + rebuild.
+- Fourth gap (BL -> Arcade ver -> Maniac): same `0xC000001D` trap class,
+  but in `futari_kiniro_normal.dll` (RVA `0x26E579`): Arcade ver loads the
+  `kiniro_normal` module, which carries the `-8`-shifted twin of the
+  kiniro_abnormal game-select table inside `sub_880EEFA0` (audit again the
+  only `cases != bound+1` switch). Fixed identically.
+- **Preemptive audit of the two untouched modules** found the same truncated
+  10-entry game-select table in `hirow_normal` (`sub_880EBB88`, dispatch
+  `0x880EBCAC`, table `0x880EBCB0`) and `hirow_abnormal` (`sub_880EBB90`,
+  dispatch `0x880EBCB4`, table `0x880EBCB8`); label values read from the
+  decoded images. All three new TOMLs also had their existing name-only gap
+  overrides (`0x881B2978` family) wired into the manifest for the first
+  time — palm/reco TOMLs remain the only previously-included ones.
+- Note: `rexglue codegen` accepted `--target A --target B ...` but
+  **crashed (0xC0000005) when analyzing multiple module targets in one
+  process** (garbage "function 0x…/IMAG/Yasu" data reads) — all eight
+  modules share guest slot 0x88000000 and analysis state is per-process.
+  One target per `rexglue` invocation is mandatory (AGENTS.md already
+  required this; solo runs all pass).
+- Fix: `futari_kiniro_normal_functions.toml` /
+  `futari_hirow_normal_functions.toml` /
+  `futari_hirow_abnormal_functions.toml` switch-table entries + manifest
+  includes; solo-regenned all three; rebuilt all DLLs.
+- **Status**: rebuilt; Stage-1 playtest **passes**. Latest (18:11-18:17,
+  Ver 1.01) run loaded and exercised the three previously-unused modules
+  cleanly: `XexLoadImage` shows `kiniro_normal` -> `hirow_normal` ->
+  `hirow_abnormal` each loading fresh through the module-swap hook
+  (`no existing module, loading fresh` each time — the unload path worked,
+  cf. Iteration 13), `5534/5541/5542` functions registered, and **no
+  `[critical]`/`[error]`/FATAL lines at all**. Module mapping so far (game
+  terminology corrected in Iteration 21 — BL Arrange has versions
+  Arcade/PCB + 360 port, modes Original/Maniac/God): BL Original mode =
+  `kiniro_abnormal`, BL Arcade ver + Ver 1.01 variants =
+  `kiniro_normal`/`hirow_normal`/`hirow_abnormal` (character-dependent).
+  Stage 2+ runs untested by the user — the gap table's stage-2/5 history
+  (e.g. `0x881B2978`/`0x881B83D0` families, already registered) plus
+  possible further per-stage gaps means expect the standard fix loop as
+  playtesting extends.
+
+## Iteration 21 — BL Original stage-2 gap (`0x881AFB10`)
+
+- Symptom: Black Label -> Original mode -> Reco, crash at the stage-2 start.
+  Log `futari_036.log`: resident module is **`kiniro_abnormal`** (loaded
+  fresh at 19:51:47 after the mode/character select unloaded
+  `hirow_abnormal`), then `[FATAL] Call to invalid or unregistered function
+  at guest address 0x881AFB10` at 19:52:52. Confirms again that developer
+  module names don't match the in-game character label ("Reco" runs
+  kiniro_abnormal here; trust the `XexLoadImage` lines). Consistent with
+  Iteration 20's mapping: BL Original ver = `kiniro_abnormal`.
+- The address is a new first-time gap in the shared stage-2 code range, below
+  the already-registered `0x881B2978`/`0x881B83D0` pair (also not one of that
+  family's byte-shifted loop twins — see Iteration 18).
+- Fix: name-only override `[functions."0x881AFB10"]` / `sub_881AFB10` in
+  `futari_kiniro_abnormal_functions.toml` (registered per-module, only where
+  the variant actually traps — other BL modes/characters may carry shifted
+  twins of this gap; register on evidence). Solo regen
+  `--target kiniro_abnormal` + glue-file restore + rebuild
+  (`futari_kiniro_abnormal.dll`, `futari.exe` relinked).
+- Retest (log `futari_037.log`, same BL -> Original -> Reco path): the fix
+  held — module registered **5528** functions (was 5527) and the crash site
+  passed — but the run died further into stage 2 with the next gap:
+  `[FATAL] Call to invalid or unregistered function at guest address
+  0x881B5710` (20:02:19, first FATAL at depth ~2.5 min of play). Same fix
+  loop: `sub_881B5710` name-only override in the same TOML (new gap sits
+  between `0x881AFB10` and the registered stage-2 pair `0x881B2978`/
+  `0x881B83D0`); solo regen + glue restore + rebuild.
+- Second retest (log `futari_038.log`, same BL -> Original -> Reco path):
+  **stage 2 cleared** — module registered **5529** functions — and the run
+  died at stage 3 with the next gap: `[FATAL] Call to invalid or
+  unregistered function at guest address 0x881C2940` (20:12:00). Same fix
+  loop: `sub_881C2940` name-only override in the same TOML (new gap below
+  the registered stage-3 pair `0x881C5530`/`0x88180500`); solo regen + glue
+  restore + rebuild.
+- Third retest (log `futari_039.log`, stage-3 boss): hit `[FATAL] Call to
+  invalid or unregistered function at guest address 0x8817D368`
+  (20:18:15). **Note: this run was stale** — it started at 20:14:59 while
+  the fix-3 build was still compiling and loaded the old DLL (module
+  registered **5529** functions, i.e. without `sub_881C2940`; the log
+  function count is the reliable build-checkout signal). The gap is genuine
+  regardless (stage-3 boss, new address below the stage-3 pair). Fix:
+  `sub_8817D368` name-only override in the same TOML; solo regen + glue
+  restore + rebuild. (Function-count arithmetic correction from retest 4:
+  the counts track the generated init-table size; after fixes 1-4 that size
+  is **5530**, matching the runtime log — the earlier "5531" expectation was
+  a baseline miscount, not a staleness signal. Staleness check for this
+  module = compare log count with the current `futari_init.cpp` entry
+  count.)
+- Fourth retest (log `futari_040.log`, started 20:21 with the fully current
+  build — runtime count **5530** == init-table size): **stage 3 boss
+  cleared**, both `sub_881C2940` + `sub_8817D368` fixes exercised. Run died
+  20:31 at the stage-4 boss: `[FATAL] Call to invalid or unregistered
+  function at guest address 0x880B3CA0`. Fix: `sub_880B3CA0` name-only
+  override in the same TOML (new address next to the known all-8 stage-4
+  crash `0x880B0B48`); init table now **5531**; solo regen + glue restore +
+  rebuild (artifacts 20:34:18).
+- Audit: no `Unresolved branch` traps in `generated/kiniro_abnormal`; the 5
+  pre-existing ones (hirow_normal/hirow_abnormal/kiniro_normal) are unchanged
+  legacy trap sites, none reachable in this pairing yet.
+- **Status**: rebuilt; awaiting retest of BL Original stage-4 boss. Expected
+  launch signature: `registered 5531 functions` (= current init-table size
+  with fixes 1-5).
+- Fifth retest (log `futari_041.log`, count **5531** == init table):**stage-4
+  boss cleared**. Died 20:47 at the stage-5 boss: `[FATAL] Call to invalid
+  or unregistered function at guest address 0x880A7AA0`. Fix: `sub_880A7AA0`
+  name-only override in the same TOML (new address near the stage-5 boss
+  family: all-8 `0x880A49B0`, reco_normal twin `0x880A494C`); init table now
+  **5532**; solo regen + glue restore + rebuild (artifacts 20:48:40).
+- **Status (updated)**: rebuilt; awaiting retest of BL Original stage-5
+  boss. Expected launch signature: `registered 5532 functions`.
+- Game-structure terminology (user correction, controlling the module
+  mapping picture): Black Label **Arrange** ships in two **versions** —
+  Arcade/PCB and Xbox 360 port — and each version has three **modes**:
+  Original, Maniac, God. There is no "Original ver": "Original" is a mode.
+  So the BL sessions here are (version = 360 port | Arcade/PCB, mode =
+  Original) pairs; earlier inline phrasings like "BL Original ver" /
+  "BL Arcade ver" map onto those (version, mode) pairs.
+- **Full-stage pass (closing Iteration 21)** — retest `futari_042.log`
+  (20:50-21:04): BL Arrange (360-port version) -> Original mode -> Reco
+  completed **stages 1-5 with all bosses, no crashes**. Signature held:
+  `registered 5532 functions` == init-table size; zero `[error]`/
+  `[critical]` lines in the whole session; clean user shutdown ("Window
+  closing" -> "Execution complete"). All six name-only overrides exercised
+  through to stage-5 boss. 14 minutes of end-to-end play is also the
+  longest error-free module session so far.
+- **Coverage state**: `kiniro_abnormal` = BL Arrange 360-port version,
+  **all modes tested so far route here** (Original + Maniac; mode logic is
+  self-contained in the module) and **both pilot labels** (Original-mode
+  Palm run `futari_043.log` loaded the same module, `5532` functions,
+  stages 1-3 clean; Maniac-mode Reco `futari_045.log` likewise loaded it,
+  stage 1 clean; adjacent `futari_044.log` also a clean short
+  `kiniro_abnormal` load). Reco: full 5-stage covered (Original mode);
+  Palm: Original mode stages 1-3 covered (4-5 open); Maniac mode: stage 1
+  covered (Reco; everything else open). BL Arcade/PCB version (which per
+  Iteration 20 maps to `kiniro_normal`/`hirow_*` = the normal-family
+  modules), God mode, and the disc variants (Ver 1.01 etc.) remain
+  untested; the stage-4/5 boss addresses `0x880B3CA0`/`0x880A7AA0` carry
+  per-module twins (check `0x880A49B0` family behavior per module), so
+  expect the standard fix loop as those runs open new stages.
+
+
+
