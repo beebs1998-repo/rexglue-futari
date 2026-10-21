@@ -36,6 +36,10 @@ jobs:
           Get-ChildItem out\build\win-amd64-release -File |
             Where-Object { $_.Name -match '\.exe$|\.dll$' } |
             Copy-Item -Destination win-amd64-release
+          # Ship the settings template too: a clean download must not run on
+          # compiled-in defaults (no keybinds/mnk, no log rotation) on first
+          # launch. Same staging the build/launch.bat perform locally.
+          Copy-Item futari.toml -Destination win-amd64-release
 
       - name: Upload Windows build
         uses: actions/upload-artifact@v4

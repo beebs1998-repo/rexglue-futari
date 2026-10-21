@@ -783,3 +783,32 @@ held green across the sessions.**
   line `origin/legacy` @ `f7d591f`) as the pacing-correlated fallback.
   Windows timer-resolution policy is not a candidate: our v0.10 line
   deliberately defers it to SDL (`1f23f2a`).
+
+## Iteration 24 (2026-10-22) — config-file staging backported from the mushi port
+
+SYMPTOM: the curated template in this repo never took effect on first
+launch — `SetupEnvironment` points the live config at
+`exe_dir/futari.toml`, and a MISSING file is benign-but-degrading (the
+game silently ran on compiled-in defaults: no keybinds/mnk, sequential
+unbounded logs, no pinned cvars). This repo's committed template was
+additionally a generated-config dump missing the d3d12 slowdown pin and
+the log-rotation pins entirely.
+
+- FIX (by construction, ported from the mushi port where it originally
+  landed): the template is staged next to the exe copy-if-missing from
+  three entry points — POST_BUILD (`scripts/stage_config.cmake`),
+  `launch.bat`, and the CI artifact. A live (F4-saved) config is NEVER
+  overwritten, so edits survive every build.
+- Template curation: `futari.toml` regenerated as a curated template —
+  added `d3d12_submit_on_primary_buffer_end = false` (the validated
+  slowdown pin; absence-after-save == default == fix active), the fixed
+  rotating `logs/futari.log` trio (4 MB x 3) replacing the sequential
+  unbounded default naming, and `log_level = "error"`. All pre-existing
+  keys preserved verbatim (keybinds, `profile_name`,
+  `audio_maxqframes = 32`, the DLC license-comment). Staging/backport
+  only — no other behaviour pins introduced (no
+  `gpu_allow_invalid_fetch_constants` copy from mushi/dfkbl: that one is
+  a behavior change and stays per-title).
+- Caution: the POST_BUILD copy triggers for every target build and only
+  writes when the live file is absent. Existing live exe-dir configs are
+  untouched by rule (verify once with a rebuild if the machine has one).

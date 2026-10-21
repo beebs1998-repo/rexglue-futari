@@ -75,6 +75,23 @@ DLC (Black Label + Version 1.01) availability comes entirely from the staged
 section would not even load: sections parse as `Section_name` cvars —
 Iteration 23). Bundling only `game_data/` is fine; base games are unaffected.
 
+## Config-file staging (backported from the mushi port)
+
+`SetupEnvironment` sets the live config to `exe_dir/futari.toml`, and a
+missing file is benign-but-degrading (game silently runs on compiled-in
+defaults: no keybinds/mnk, no log rotation, no pinned cvars). Historically
+this project's template therefore never took effect on first launch. It is
+now staged by construction, three entry points, ALL copy-if-missing — the
+live file is never overwritten:
+
+- POST_BUILD stages `futari.toml` next to the exe if missing
+  (`scripts/stage_config.cmake`).
+- `launch.bat` applies the same rule.
+- CI ships `futari.toml` inside the build artifact.
+
+If the template changes after first stage, delete the live copy or re-edit
+via F4 to re-sync (documented in README "Settings").
+
 ## Layout
 
 | Path | Notes |

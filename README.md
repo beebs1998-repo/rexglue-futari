@@ -108,9 +108,25 @@ The game writes logs to `logs/` and saves to `user_data/`.
 
 ## Settings
 
-Settings live in `futari.toml` and can be changed live from the in-game overlay
-(press **F4**). The debug overlay is **F3**. Defaults here use keyboard input
+The game reads and writes `futari.toml` **next to the executable**
+(`out\build\win-amd64-release\futari.toml` by default). The copy in this
+repository is a *template*: the build (POST_BUILD) and `launch.bat` stage it
+next to the exe **only if the live file does not already exist**, so the
+curated defaults are in effect from the very first launch. A copy-if-missing
+staging rule means:
+
+- your F4 edits and manual tweaks are never clobbered by a rebuild;
+- editing the repo template after first stage does NOT propagate - delete
+  the live copy (or re-edit via F4) to re-sync.
+
+Settings can be changed live from the in-game overlay (press **F4**). The
+debug overlay is **F3**. Defaults here use keyboard input
 (`mnk_mode = true`); the key bindings are listed in `futari.toml`.
+
+Saving is **diff-only**: only cvars whose current value differs from the
+compiled-in SDK default are written. A cvar sitting at its default therefore
+does not appear in the file, and a default-equal line is dropped by the next
+save - that is expected, not a desync between the menu and the file.
 
 **Audio buffering** (`audio_maxqframes = 32`): shipped value protects against
 occasional crackling on some audio endpoints at the cost of added sound
