@@ -687,3 +687,99 @@ kiniro 5573/5565, hirow 5582/5583 (normal/abnormal) - every unload reports
 too). The crash class that Iterations 3-8 and 17-21 chased one address at a
 time is now covered statically by the 477 hints, and the embedded-trap gate
 held green across the sessions.**
+
+## Iteration 23 — dead `license_mask` TOML block removed; `audio_maxqframes` crackle knob
+
+- Symptom (user report): the `futari.toml` `[Kernel] license_mask = 4294967295`
+  hand-added block (Iteration 20) kept disappearing — every exit save
+  (`FutariApp::OnWindowCloseRequested`/`OnShutdown` → `rex::cvar::SaveConfig`)
+  and the F4 overlay save rewrote the file without it. Observation that goes
+  with it: DLC (Black Label + Version 1.01) stayed accessible with the line
+  gone.
+- Root cause analysis (SDK `src/core/cvar.cpp`, all read-only, no code change
+  shipped):
+  - `ApplyTomlTable` prefixes TOML section names onto keys
+    (`prefix + "_" + key`): `[Kernel] license_mask` parses as cvar name
+    **`Kernel_license_mask`**, which is not registered (the real cvar name is
+    flat `license_mask`). The value was deferred forever and never applied —
+    the Iteration 20 line was dead config from the day it was written.
+  - `SerializeToTOML` (flat rewrite) writes only applied non-default,
+    non-invocation-sourced cvars; sections and comments never round-trip, so
+    the unapplied block (plus its comment) vanishes on the next save.
+- Why DLC works without it: confirmed against Iteration 20's mechanism — the
+  actual unlock is the 4-byte `0xFFFFFFFF` license tails appended to the
+  staged `Headers/00000002/*.header` files, and `XamContentCreateEx` returns
+  those per-package bits (`xam_content.cpp` `content_license`) when the game
+  opens each package. The cvar only feeds the separate
+  `XamContentGetLicenseMask` import, which futari does not gate on. Absent
+  DLC data is purely subtractive too: with no `00000002` packages staged the
+  game select simply lists only the disc versions — there is no all-or-
+  nothing license gate that could block the base games (Iterations 3-19 were
+  played before any DLC staging, mask never functional).
+- Decision: drop the reliance instead of fixing it — the futari_recomp port
+  solves this differently (pinned `SetCvarInt("license_mask", …)` in app-side
+  `OnPreSetup`, `src/main.cpp`; plus an ini-merge config writer we deliberately
+  do not port at this time). Neither is needed here; the file now records the
+  caveat in a comment instead. `futari.toml` edits: removed the `[Kernel]`
+  block + comment, added the flat `audio_maxqframes = 16` line (below).
+- Status: CONFIG RESOLVED. No rebuild required; next exit save persists the
+  remaining lines as-is (value lines are flat, so removal can't repeat). Both
+  DLC entries remain working for staged runs; bare-`game_data` runs unaffected.
+
+### Part 2 — occasional audio crackle (knob first)
+
+- Symptom (user report): occasional crackling in the soundtrack during
+  normal play.
+- Audit of the reference port first: `futari_recomp` s vendored SDK is the
+  *older* v0.9-line snapshot — a `src/audio/` diff against our pin (`348c804`,
+  v0.10-line) shows our tree already contains every "XMA audio fixes" commit
+  their changelog mentions (loop-wrap tail `819e384`, MDCT-overlap reset on
+  context recycle `598ac5f`, the carry-splice padding logic, plus the newer
+  per-callback fold/mix snapshot and graceful audio-worker shutdown) plus
+  extras (`downmix.cpp`) theirs lacks. Nothing to transplant; ours is ahead.
+- Chosen first knob: `audio_maxqframes` (SDK `Audio` cvar, default 8, range
+  4-64; SDK help text: "Lower reduces latency but may cause stuttering").
+  Pinned as flat `audio_maxqframes = 16` in `futari.toml`. Read once at
+  `AudioSystem` construction → restart required; auto-saves preserve it since
+  it is a flat applied line.
+- Playtest 1 (`futari_052.log`, 11:52-12:02, `audio_maxqframes = 16` active —
+  confirmed by the post-close save persisting the line, the knob was applied
+  at boot): BL → 360 version → Original mode → Reco up to the stage 2 boss.
+  User heard exactly **2 crackles** across the whole session. Log is clean:
+  only the 3 pre-existing warnings (GameControllerDB missing,
+  `XamBackgroundDownloadSetMode STUB`, unknown-achievement `0000003B`); no
+  APU/XMA lines that could correlate (underruns log at DEBUG, hidden at the
+  default level). Playback endpoint note: SDL opened an **8-channel** device
+  (`CABLE Input (VB-Audio Virtual Cable)`, 48 kHz) at boot (5 s after input
+  init); the driver submits 6 ch and SDL re-mixes — no error path.
+- Playtest 2 (full BL → 360 → Original mode → Reco run to stage end,
+  `audio_maxqframes = 64`): **no crackling**, but the cost is audible — input
+  feedback lag ("menu blip comes later when scrolling fast"). Mechanism
+  confirmed: a queued frame is one 256-sample block per channel set
+  (`sdl_audio_driver.h` `channel_samples_ = 256`), ~5.3 ms at the 48 kHz
+  endpoint, and the queue stays pinned at the cap, so added latency ≈ cap ×
+  5.3 ms (64 ≈ 341 ms, 32 ≈ 171 ms, 24 ≈ 128 ms, 16 ≈ 85 ms). The knob is a
+  hard latency-vs-starvation tradeoff, not a fix for any pathology.
+- Escalation/step-down: `audio_maxqframes = 32` pinned in the repo-root and
+  runtime `futari.toml`, guided by the mapping above (32 ≈ 171 ms vs 64 ≈
+  341 ms fallback, 24 ≈ 128 ms would be the next step-down if lag mattered,
+  16 ≈ 85 ms is where the 2 crackles reappeared). Restarts are required per
+  value since the cvar is read at `AudioSystem` construction; auto-saves
+  preserve the flat line.
+- Playtest 3 (BL → 360 → Original mode → Reco up to the stage 3 boss,
+  `audio_maxqframes = 32`): **no crackling**, and the added sound latency is
+  judged acceptable — noticeably less laggy than 64 in the same menu-scroll
+  test. 32 is the sweet spot and stays pinned.
+- **Config RESOLVED** — Iteration 23 Part 2 closed as configuration-level: no
+  SDK/audio-path change made or needed. Desktop hardware that already
+  defaults to 8 without special endpoint situations is untouched; port-wide
+  future consideration (not done): on platforms where `audio_maxqframes`
+  defaults to 8 and the endpoint is non-native (8-ch remixer), a higher
+  default may be worth an SDK-side look if crackles resurface — the diagnosis
+  would go through a debug-logged session (`REXAPU_DEBUG` "no frames queued
+  (silence)" fires only for the first 10 callbacks, so correlate timestamps
+  manually, plus `log_noisy` XMA logs) before any code change, with the
+  legacy-branch VBlank pacing commits (`d1de8d1`/`793728c`, untracked fork
+  line `origin/legacy` @ `f7d591f`) as the pacing-correlated fallback.
+  Windows timer-resolution policy is not a candidate: our v0.10 line
+  deliberately defers it to SDL (`1f23f2a`).

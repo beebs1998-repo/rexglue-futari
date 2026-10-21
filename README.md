@@ -112,6 +112,15 @@ Settings live in `futari.toml` and can be changed live from the in-game overlay
 (press **F4**). The debug overlay is **F3**. Defaults here use keyboard input
 (`mnk_mode = true`); the key bindings are listed in `futari.toml`.
 
+**Audio buffering** (`audio_maxqframes = 32`): shipped value protects against
+occasional crackling on some audio endpoints at the cost of added sound
+latency — every buffered unit adds ~5 ms (each is a 256-sample block, so
+32 ≈ 171 ms). If the sound delay feels unacceptable to you (e.g. menu sound
+effects land late when scrolling), lower it — each step of −8 removes ~43 ms
+of delay but increases the chance of brief crackles during busy moments;
+`16` is about the floor (~85 ms). Raise it toward `64` if you trade the other
+way. Restart the game to apply.
+
 ## Regenerating the recompiled code (optional)
 
 Only needed if you change the manifest/function lists, or bump the SDK. It

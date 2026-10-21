@@ -24,9 +24,13 @@ keybind_rstick_press = "O"
 keybind_start = "1"
 profile_name = "REX"
 gpu_plugin = "xenos"
+audio_maxqframes = 32
 
-# DLC unlock: grants all license bits (Black Label + Version 1.01) to
-# XamContentGetLicenseMask. Per-package licenses come from the 4-byte tails
-# appended to user_data\0000000000000000\435A07D7\Headers\00000002\*.header.
-[Kernel]
-license_mask = 4294967295
+# DLC unlock does not need license_mask: per-package license bits come from
+# the 4-byte tails appended to user_data\0000000000000000\435A07D7\Headers\
+# 00000002\*.header, and XamContentCreateEx returns those when the game
+# opens each package (XamContentGetLicenseMask's cvar path is not needed;
+# see TRACKING.md Iteration 23). Caveat from cvar.cpp: a [Section] TOML
+# block is parsed as "Section_key", so a [Kernel] section would land on the
+# nonexistent cvar `Kernel_license_mask` and be silently dropped on the next
+# auto-save. Base games do not require any of this.

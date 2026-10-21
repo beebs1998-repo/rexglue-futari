@@ -67,6 +67,14 @@ to change); the right-hand 1P pilot name (e.g. `CRN`) is recorded at
 score-registration time when the run enters the local top-10 — low-score runs
 save without one. See TRACKING.md Iteration 17.
 
+DLC (Black Label + Version 1.01) availability comes entirely from the staged
+`00000002` packages + per-package `0xFFFFFFFF` license tails on their
+`Headers/00000002/*.header` files (Iteration 20) — the
+`XamContentGetLicenseMask` cvar is **not** needed, so there is no
+`license_mask` line to maintain in `futari.toml` (and a `[Kernel]` TOML
+section would not even load: sections parse as `Section_name` cvars —
+Iteration 23). Bundling only `game_data/` is fine; base games are unaffected.
+
 ## Layout
 
 | Path | Notes |
