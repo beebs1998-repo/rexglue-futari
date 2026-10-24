@@ -51,7 +51,7 @@ select; all eight share guest base `0x88000000`, so only one is resident at a ti
 | --- | --- |
 | `src/` | Host application (`main.cpp`, `futari_app.h`, `futari_mod_swap_fix.cpp`) |
 | `generated/default/` | Recompiled entrypoint + `dll_targets.cmake` / `module_registry.cpp` |
-| `generated/palm_normal|.../` | Recompiled character modules (eight of them) |
+| `generated/palm_normal,.../` | Recompiled character modules (eight of them) |
 | `generated/rexglue.cmake` | SDK/CMake glue (codegen auto-generation disabled — see below) |
 | `futari_manifest.toml` | Codegen manifest (entrypoint + 8 modules) |
 | `futari*_functions.toml` | Extra dynamic entrypoints and switch tables, per target |
